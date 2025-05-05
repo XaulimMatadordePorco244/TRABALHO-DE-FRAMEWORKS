@@ -6,7 +6,7 @@
     <title>Cadastro Estudante</title>
 </head>
 <body>
-    <h1>VEM TRANQUILO</h1>
+    <h1>TRABALHO GYMSISTEM>
     <form onsubmit="event.preventDefault();trataForm()">
         <input type="text" id="id" name="id" placeholder="ID">
         <input type="text" id="nome" name="nome" placeholder="Nome">
@@ -24,7 +24,7 @@
                 nome
             }
             try{
-                const resposta = await fetch("http://localhost:8000/aprovados",{
+                const resposta = await fetch("http://localhost:8000/alunos",{
                 headers:{
                     'Content-Type': 'application/json'
                 },
