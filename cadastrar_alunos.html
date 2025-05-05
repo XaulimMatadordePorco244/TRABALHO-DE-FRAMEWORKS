@@ -1,51 +1,118 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro Estudante</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - Academia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      margin-bottom: 30px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    input {
+      display: block;
+      margin: 10px 0;
+      padding: 8px;
+      width: 100%;
+    }
+    input[type="submit"] {
+      background-color: #28a745;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-    <h1>TRABALHO GYMSISTEM>
-    <form onsubmit="event.preventDefault();trataForm()">
-        <input type="text" id="id" name="id" placeholder="ID">
-        <input type="text" id="nome" name="nome" placeholder="Nome">
-        <input type="submit" value="Enviar">
-    </form>
-    <script>
-        async function trataForm(){
-            const idInput = document.getElementById("id")
-            const idNome = document.getElementById("nome")
-            const nome = idNome.value 
-            const id = idInput.value 
 
-            const objEstudante = {
-                id,
-                nome
-            }
-            try{
-                const resposta = await fetch("http://localhost:8000/alunos",{
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                method:"POST",
-                body: JSON.stringify(objEstudante)
-            })
-            if(resposta.status===404){
-                alert("Estudante não foi excluída")
-            }
-            if(resposta.status===400){
-                const dados = await resposta.json()
-                alert(`Deu erro do lado do servidor/n" ${dados.mensagem}`)
-            }
-            if(resposta.status===200){
-                alert("Estudante cadastrado com sucesso")
-            }
-            }catch(erro){
-                console.log(erro)
-                alert("Deu algo errado na requisição do post!")
-            }
+  <h1>Cadastro de Alunos</h1>
+  <form id="formAluno" onsubmit="event.preventDefault(); cadastrarAluno()">
+    <input type="text" id="cpfAluno" placeholder="CPF do Aluno (somente números)">
+    <input type="text" id="nomeAluno" placeholder="Nome do Aluno">
+    <input type="number" id="idadeAluno" placeholder="Idade">
+    <input type="text" id="planoAluno" placeholder="Plano (mensal/trimestral/etc)">
+    <input type="submit" value="Cadastrar Aluno">
+  </form>
+
+  <h1>Cadastro de Funcionários</h1>
+  <form id="formFuncionario" onsubmit="event.preventDefault(); cadastrarFuncionario()">
+    <input type="text" id="cpfFuncionario" placeholder="CPF do Funcionário (somente números)">
+    <input type="text" id="nomeFuncionario" placeholder="Nome do Funcionário">
+    <input type="text" id="cargoFuncionario" placeholder="Cargo (instrutor, recepcionista...)">
+    <input type="submit" value="Cadastrar Funcionário">
+  </form>
+
+  <script>
+    async function cadastrarAluno() {
+      const cpf = document.getElementById("cpfAluno").value;
+      const nome = document.getElementById("nomeAluno").value;
+      const idade = document.getElementById("idadeAluno").value;
+      const plano = document.getElementById("planoAluno").value;
+
+      const aluno = { cpf, nome, idade, plano };
+
+      try {
+        const resposta = await fetch("http://localhost:8000/alunos", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(aluno)
+        });
+
+        const dados = await resposta.json();
+
+        if (resposta.status === 200) {
+          alert("Aluno cadastrado com sucesso!");
+        } else {
+          alert("Erro ao cadastrar aluno: " + dados.mensagem);
         }
-    </script>
+      } catch (erro) {
+        console.error("Erro na requisição:", erro);
+        alert("Erro na requisição. Verifique se o back-end está rodando.");
+      }
+    }
+
+    async function cadastrarFuncionario() {
+      const cpf = document.getElementById("cpfFuncionario").value;
+      const nome = document.getElementById("nomeFuncionario").value;
+      const cargo = document.getElementById("cargoFuncionario").value;
+
+      const funcionario = { cpf, nome, cargo };
+
+      try {
+        const resposta = await fetch("http://localhost:8000/funcionarios", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(funcionario)
+        });
+
+        const dados = await resposta.json();
+
+        if (resposta.status === 200) {
+          alert("Funcionário cadastrado com sucesso!");
+        } else {
+          alert("Erro ao cadastrar funcionário: " + dados.mensagem);
+        }
+      } catch (erro) {
+        console.error("Erro na requisição:", erro);
+        alert("Erro na requisição. Verifique se o back-end está rodando.");
+      }
+    }
+  </script>
+
 </body>
 </html>

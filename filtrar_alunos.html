@@ -1,11 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
+</head>
+
 <body>
-    <a></a>Anaaaaaallllllll
+    <label for="filtroSerie">Filtrar por série:</label>
+    <select id="filtroSerie" onchange="filtrarAlunos()">
+        <option value="todos">Todos</option>
+        <option value="1ano">1º Ano</option>
+        <option value="2ano">2º Ano</option>
+        <option value="3ano">3º Ano</option>
+    </select>
+
+    <div id="listaAlunos">
+        <!-- Alunos aparecerão aqui -->
+    </div>
+
 </body>
+
 </html>

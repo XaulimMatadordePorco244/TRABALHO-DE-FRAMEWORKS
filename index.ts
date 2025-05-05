@@ -7,7 +7,7 @@ app.register(cors)
 app.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
     reply.send("Fastify Funcionando")
 })
-app.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
+app.get('/estudantes', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
         const conn =  await mysql.createConnection({
             host: "localhost",
