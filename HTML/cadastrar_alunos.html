@@ -27,7 +27,7 @@
       width: 100%;
     }
     input[type="submit"] {
-      background-color: #28a745;
+      background-color: #0061e0;
       color: white;
       font-weight: bold;
       cursor: pointer;
@@ -47,10 +47,10 @@
 
   <h1>Cadastro de Funcionários</h1>
   <form id="formFuncionario" onsubmit="event.preventDefault(); cadastrarFuncionario()">
-    <input type="text" id="cpfFuncionario" placeholder="CPF do Funcionário (somente números)">
-    <input type="text" id="nomeFuncionario" placeholder="Nome do Funcionário">
+    <input type="text" id="cpfFuncionario" placeholder="CPF do Funcionario (somente numeros)">
+    <input type="text" id="nomeFuncionario" placeholder="Nome do Funcionario">
     <input type="text" id="cargoFuncionario" placeholder="Cargo (instrutor, recepcionista...)">
-    <input type="submit" value="Cadastrar Funcionário">
+    <input type="submit" value="Cadastrar Funcionario">
   </form>
 
   <script>
@@ -79,8 +79,8 @@
           alert("Erro ao cadastrar aluno: " + dados.mensagem);
         }
       } catch (erro) {
-        console.error("Erro na requisição:", erro);
-        alert("Erro na requisição. Verifique se o back-end está rodando.");
+        console.error("Erro na requisicao:", erro);
+        alert("Erro na requisicao. Verifique se o back-end esta rodando.");
       }
     }
 
@@ -103,13 +103,13 @@
         const dados = await resposta.json();
 
         if (resposta.status === 200) {
-          alert("Funcionário cadastrado com sucesso!");
+          alert("Funcionario cadastrado com sucesso!");
         } else {
-          alert("Erro ao cadastrar funcionário: " + dados.mensagem);
+          alert("Erro ao cadastrar funcionario: " + dados.mensagem);
         }
       } catch (erro) {
-        console.error("Erro na requisição:", erro);
-        alert("Erro na requisição. Verifique se o back-end está rodando.");
+        console.error("Erro na requisicao:", erro);
+        alert("Erro na requisicao. Verifique se o back-end esta rodando.");
       }
     }
   </script>

@@ -5,15 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listagem de Estudantes</title>
+    <link rel="stylesheet" href="/CSS/cabecalho.css">
+
 </head>
 
 <body>
+    <header>
+        <a href="#" class="logo">MangaStore</a>
+        <nav>
+            <ul>
+                <li><a href="#">Início</a></li>
+                <li><a href="#">Categorias</a></li>
+                <li><a href="#">Lançamentos</a></li>
+                <li><a href="#">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <h1>Lista de Estudantes</h1>
+    <!-- Conteúdo principal da página -->
+    <main>
+        <h1>Bem-vindo à MangaStore!</h1>
+        <p>Explore os mangás mais populares e lançamentos recentes.</p>
+    </main>
+
+    <h1>Lista de Alunos</h1>
     <div id="lista-estudantes"></div>
-    <p><a href="./cadastrar_alunos.html">Cadastrar Estudante</a></p>
+    <p><a href="CSS/cadastrar_alunos.html">Cadastrar Aluno</a></p>
 
-    
+
 
     <script>
         async function listarEstudantes() {
@@ -39,7 +58,7 @@
                 div.appendChild(ul);
             } catch (erro) {
                 console.log(erro);
-                alert("Erro ao buscar lista de estudantes.");
+                //alert("Erro ao buscar lista de estudantes.");
             }
         }
 

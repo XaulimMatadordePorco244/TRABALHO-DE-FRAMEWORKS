@@ -1,0 +1,52 @@
+/* cabecalho.css */
+
+/* Variáveis de cores e fontes (você pode personalizar) */
+:root {
+    --cor-fundo-cabecalho: #1e1e1e;
+    --cor-texto-cabecalho: #ffffff;
+    --cor-hover-link: #ff4c4c;
+    --fonte-principal: 'Arial', sans-serif;
+  }
+  
+  /* Estilo do cabeçalho */
+  header {
+    background-color: var(--cor-fundo-cabecalho);
+    color: var(--cor-texto-cabecalho);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--fonte-principal);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Logotipo */
+  header .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--cor-texto-cabecalho);
+    text-decoration: none;
+  }
+  
+  /* Navegação */
+  header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header nav ul li a {
+    color: var(--cor-texto-cabecalho);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+  }
+  
+  header nav ul li a:hover {
+    color: var(--cor-hover-link);
+  }
+  
