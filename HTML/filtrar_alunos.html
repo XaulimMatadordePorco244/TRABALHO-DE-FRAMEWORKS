@@ -1,27 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Cadastro de Alunos</title>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 8px;
+    }
+  </style>
 </head>
-
-</head>
-
 <body>
-    <label for="filtroSerie">Filtrar por serie:</label>
-    <select id="filtroSerie" onchange="filtrarAlunos()">
-        <option value="todos">Todos</option>
-        <option value="1ano">1º Ano</option>
-        <option value="2ano">2º Ano</option>
-        <option value="3ano">3º Ano</option>
-    </select>
 
-    <div id="listaAlunos">
-        <!-- Alunos aparecerao aqui -->
-    </div>
+    
+  <h2>Pesquisar Alunos</h2>
+  <input type="text" id="cpfBusca" placeholder="Digite o CPF para buscar">
+  <button onclick="buscarAluno()">Buscar</button>
+
+  <h2>Dados</h2>
+  <table id="tabelaAluno">
+    <thead>
+      <tr>
+        <th>CPF</th>
+        <th>Nome</th>
+        <th>Idade</th>
+        <th>Plano</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Dados inseridos dinamicamente -->
+    </tbody>
+  </table>
+
+  <script>
+    const alunos = [];
+
+    function buscarAluno() {
+      const cpfBusca = document.getElementById('cpfBusca').value;
+      const aluno = alunos.find(aluno => aluno.cpf === cpfBusca);
+
+      const tabela = document.getElementById('tabelaAluno').getElementsByTagName('tbody')[0];
+      tabela.innerHTML = ''; // Limpa a tabela antes de mostrar
+
+      if (aluno) {
+        const linha = tabela.insertRow();
+        linha.insertCell(0).innerText = aluno.cpf;
+        linha.insertCell(1).innerText = aluno.nome;
+        linha.insertCell(2).innerText = aluno.idade;
+        linha.insertCell(3).innerText = aluno.plano;
+      } else {
+        alert("Aluno não encontrado.");
+      }
+    }
+  </script>
 
 </body>
-
 </html>

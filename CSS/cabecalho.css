@@ -1,11 +1,15 @@
-/* cabecalho.css */
 
 /* Variáveis de cores e fontes (você pode personalizar) */
 :root {
-    --cor-fundo-cabecalho: #1e1e1e;
+    --cor-fundo-cabecalho: #1c1c1c;
     --cor-texto-cabecalho: #ffffff;
-    --cor-hover-link: #ff4c4c;
+    --cor-botao: #2e2e2e;
     --fonte-principal: 'Arial', sans-serif;
+    --fundo-pagina: #d3d3d3;
+    --caixa-de-resposta: #f7f7f7;
+  }
+  body{
+    margin: 0px;
   }
   
   /* Estilo do cabeçalho */
@@ -24,7 +28,6 @@
   header .logo {
     font-size: 1.8rem;
     font-weight: bold;
-    text-transform: uppercase;
     letter-spacing: 2px;
     color: var(--cor-texto-cabecalho);
     text-decoration: none;
@@ -47,6 +50,6 @@
   }
   
   header nav ul li a:hover {
-    color: var(--cor-hover-link);
+    color: );
   }
   

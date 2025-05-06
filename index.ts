@@ -13,7 +13,7 @@ app.get('/estudantes', async (request: FastifyRequest, reply: FastifyReply) => {
             host: "localhost",
             user: 'root',
             password: "",
-            database: 'banco1023b',
+            database: 'academia',
             port: 3306
         })
         const resultado =  await conn.query("SELECT * FROM estudantes")
