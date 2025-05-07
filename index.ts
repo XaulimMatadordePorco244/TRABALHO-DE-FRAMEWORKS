@@ -1,52 +1,91 @@
-import mysql, { Connection, ConnectionOptions } from 'mysql2/promise';
-import fastify, { FastifyRequest, FastifyReply } from 'fastify'
-import cors from '@fastify/cors'
-const app = fastify()
-app.register(cors)
+import mysql from 'mysql2/promise';
+import fastify, { FastifyRequest, FastifyReply } from 'fastify';
+import cors from '@fastify/cors';
 
+const app = fastify();
+app.register(cors);
+
+// Conexão com o banco
+async function conectar() {
+  return await mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "academia",
+    port: 3306
+  });
+}
+
+// Rota padrão
 app.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
-    reply.send("Fastify Funcionando")
-})
-app.get('/estudantes', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-        const conn =  await mysql.createConnection({
-            host: "localhost",
-            user: 'root',
-            password: "",
-            database: 'academia',
-            port: 3306
-        })
-        const resultado =  await conn.query("SELECT * FROM estudantes")
-        const [dados, camposTabela] = resultado
-        reply.status(200).send(dados)
-    }
-    catch (erro: any) {
-        if (erro.code === 'ECONNREFUSED') {
-            console.log("ERRO: LIGUE O LARAGAO => Conexão Recusada")
-            reply.status(400).send({mensagem:"ERRO: LIGUE O LARAGAO => Conexão Recusada"})
-        } else if (erro.code === 'ER_BAD_DB_ERROR') {
-            console.log("ERRO: CRIE UM BANCO DE DADOS COM O NOME DEFINIDO NA CONEXÃO")
-            reply.status(400).send({mensagem:"ERRO: CRIE UM BANCO DE DADOS COM O NOME DEFINIDO NA CONEXÃO"})
-        } else if (erro.code === 'ER_ACCESS_DENIED_ERROR') {
-            console.log("ERRO: CONFERIR O USUÁRIO E SENHA DEFINIDOS NA CONEXÃO")
-            reply.status(400).send({mensagem:"ERRO: CONFERIR O USUÁRIO E SENHA DEFINIDOS NA CONEXÃO"})
-        } else if (erro.code === 'ER_NO_SUCH_TABLE') {
-            console.log("ERRO: Você deve criar a tabela com o mesmo nome da sua QUERY")
-            reply.status(400).send({mensagem:"ERRO: Você deve criar a tabela com o mesmo nome da sua QUERY"})
-        } else if (erro.code === 'ER_PARSE_ERROR') {
-            console.log("ERRO: Você tem um erro de escrita em sua QUERY confira: VÍRGULAS, PARENTESES E NOME DE COLUNAS")
-            reply.status(400).send({mensagem:"ERRO: Você tem um erro de escrita em sua QUERY confira: VÍRGULAS, PARENTESES E NOME DE COLUNAS"})
-        } else {
-            console.log(erro)
-            reply.status(400).send({mensagem:"ERRO: NÃO IDENTIFICADO"})
-        }
-    }
-})
+  reply.send("Fastify Funcionando");
+});
 
+// Rota GET para listar estudantes (exemplo de leitura)
+app.get('/estudantes', async (request: FastifyRequest, reply: FastifyReply) => {
+  try {
+    const conn = await conectar();
+    const [dados] = await conn.query("SELECT * FROM alunos");
+    reply.status(200).send(dados);
+  } catch (erro: any) {
+    tratarErroMySQL(erro, reply);
+  }
+});
+
+// Rota POST para cadastrar alunos
+app.post('/alunos', async (request: FastifyRequest, reply: FastifyReply) => {
+  const { cpf, nome, idade, plano } = request.body as any;
+
+  try {
+    const conn = await conectar();
+    await conn.query(
+      "INSERT INTO alunos (cpf, nome, idade, plano) VALUES (?, ?, ?, ?)",
+      [cpf, nome, idade, plano]
+    );
+    reply.status(200).send({ mensagem: "Aluno cadastrado com sucesso!" });
+  } catch (erro: any) {
+    tratarErroMySQL(erro, reply);
+  }
+});
+
+// Rota POST para cadastrar funcionários
+app.post('/funcionarios', async (request: FastifyRequest, reply: FastifyReply) => {
+  const { cpf, nome, cargo } = request.body as any;
+
+  try {
+    const conn = await conectar();
+    await conn.query(
+      "INSERT INTO funcionarios (cpf, nome, cargo, horario) VALUES (?, ?, ?, ?)",
+      [cpf, nome, cargo, ""]
+    );
+    reply.status(200).send({ mensagem: "Funcionário cadastrado com sucesso!" });
+  } catch (erro: any) {
+    tratarErroMySQL(erro, reply);
+  }
+});
+
+// Função para tratamento de erros SQL
+function tratarErroMySQL(erro: any, reply: FastifyReply) {
+  if (erro.code === 'ECONNREFUSED') {
+    reply.status(500).send({ mensagem: "Erro: Conexão recusada. Verifique o servidor MySQL." });
+  } else if (erro.code === 'ER_DUP_ENTRY') {
+    reply.status(400).send({ mensagem: "Erro: CPF já cadastrado." });
+  } else if (erro.code === 'ER_BAD_DB_ERROR') {
+    reply.status(500).send({ mensagem: "Erro: Banco de dados não encontrado." });
+  } else if (erro.code === 'ER_NO_SUCH_TABLE') {
+    reply.status(500).send({ mensagem: "Erro: Tabela não encontrada. Verifique se o banco está correto." });
+  } else {
+    console.error(erro);
+    reply.status(500).send({ mensagem: "Erro desconhecido." });
+  }
+}
+
+// Iniciar servidor
 app.listen({ port: 8000 }, (err, address) => {
-    if (err) {
-        console.error(err)
-        process.exit(1)
-    }
-    console.log(`Server listening at ${address}`)
-})
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  console.log(`Servidor rodando em ${address}`);
+});
+

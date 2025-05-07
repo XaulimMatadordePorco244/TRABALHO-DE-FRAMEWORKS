@@ -34,5 +34,5 @@ app.delete('/usuarios/:id', async (req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:8000`);
+  console.log(`Servidor rodando em http://localhost:5500`);
 });

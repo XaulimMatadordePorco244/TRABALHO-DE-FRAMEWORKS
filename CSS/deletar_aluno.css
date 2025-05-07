@@ -1,0 +1,14 @@
+body {
+    font-family: Arial;
+    padding: 20px;
+}
+
+input,
+button {
+    padding: 5px;
+    margin: 5px 0;
+}
+
+.deleted-list {
+    margin-top: 20px;
+}

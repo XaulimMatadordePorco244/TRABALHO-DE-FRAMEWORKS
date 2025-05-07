@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAI SER SÓ PÁ NAS CANJHANGA</title>
+    <link rel="stylesheet" href="/CSS/deletar_aluno.css">
+    <link rel="stylesheet" href="/CSS/cabecalho.css">
+
+<style>
+   
+</style>
+
+</head>
+
+<body>
+    <header>
+        <h1>GymSystem</h1>
+        <p>Organize sua Academia com Facilidade!</p>
+    </header>
+    <h2>Deletar Cadastro pelo CPF</h2>
+
+    <label for="cpf">CPF:</label>
+    <input type="text" id="cpf" placeholder="Digite o CPF">
+    <button onclick="deletarCadastro()">Deletar</button>
+
+    <p id="mensagem"></p>
+
+    <div class="deleted-list">
+        <h3>Cadastros Deletados:</h3>
+        <ul id="listaDeletados"></ul>
+    </div>
+
+    <script>
+        // Simulação de cadastros
+        const cadastros = [
+            { nome: "Ana Souza", cpf: "11111111111" },
+            { nome: "Carlos Lima", cpf: "22222222222" },
+            { nome: "Mariana Rocha", cpf: "33333333333" },
+        ];
+
+        const deletados = [];
+
+        function deletarCadastro() {
+            const cpfInput = document.getElementById('cpf').value.trim();
+            const index = cadastros.findIndex(c => c.cpf === cpfInput);
+
+            if (index !== -1) {
+                const pessoaRemovida = cadastros.splice(index, 1)[0];
+                deletados.push(pessoaRemovida.nome);
+
+                document.getElementById('mensagem').textContent = `Cadastro de ${pessoaRemovida.nome} deletado com sucesso.`;
+                atualizarListaDeletados();
+            } else {
+                document.getElementById('mensagem').textContent = "CPF não encontrado.";
+            }
+
+            document.getElementById('cpf').value = '';
+        }
+
+        function atualizarListaDeletados() {
+            const lista = document.getElementById('listaDeletados');
+            lista.innerHTML = "";
+            deletados.forEach(nome => {
+                const li = document.createElement("li");
+                li.textContent = nome;
+                lista.appendChild(li);
+            });
+        }
+    </script>
+
+</body>
+
+</html>
