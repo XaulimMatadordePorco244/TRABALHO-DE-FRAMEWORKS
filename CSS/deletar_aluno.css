@@ -1,14 +1,45 @@
 body {
     font-family: Arial;
-    padding: 20px;
+    padding: 20px;                  
+    background-color: #eaeaea; 
 }
-
-input,
+input{
+    display: block;
+    margin: 10px 0;
+    padding: 8px;
+    width: 95%;
+}
 button {
     padding: 5px;
-    margin: 5px 0;
+    margin: 0px 0;
+    width: 100%;
+    background-color: var(--cor-secundaria);
+    color: #ffffff;
 }
 
 .deleted-list {
     margin-top: 20px;
+}
+.form-container {
+    display: flex;
+    justify-content: center; /* centraliza horizontalmente */
+    align-items: center;     /* centraliza verticalmente */
+    height: 30vh;           /* ocupa toda a altura da tela */
+  }
+form {
+    align-items: center;
+    margin-bottom: 30px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: whitesmoke;
+    max-width: 20%;
+    width: 100%;
+  }
+h2{
+    text-align: center;
+    height: 0vh;
+}
+.mensagem{
+    text-align: center;
 }

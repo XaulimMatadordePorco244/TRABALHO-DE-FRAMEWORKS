@@ -16,23 +16,27 @@
     <p>Organize sua Academia com Facilidade!</p>
   </header>
 
-  <h1>Cadastro de Alunos</h1>
-  <form id="formAluno" onsubmit="event.preventDefault(); cadastrarAluno()">
-    <input type="text" id="cpfAluno" placeholder="CPF do Aluno (somente números)">
-    <input type="text" id="nomeAluno" placeholder="Nome do Aluno">
-    <input type="number" id="idadeAluno" placeholder="Idade">
-    <input type="text" id="planoAluno" placeholder="Plano (mensal/trimestral/etc)">
-    <input type="submit" value="Cadastrar Aluno">
-  </form>
-
-  <h1>Cadastro de Funcionários</h1>
-  <form id="formFuncionario" onsubmit="event.preventDefault(); cadastrarFuncionario()">
-    <input type="text" id="cpfFuncionario" placeholder="CPF do Funcionario (somente numeros)">
-    <input type="text" id="nomeFuncionario" placeholder="Nome do Funcionario">
-    <input type="text" id="cargoFuncionario" placeholder="Cargo (instrutor, recepcionista...)">
-    <input type="submit" value="Cadastrar Funcionario">
-  </form>
-
+  <main>
+    <div class="container">
+      <h1>Cadastro de Alunos</h1>
+      <form id="formAluno" onsubmit="event.preventDefault(); cadastrarAluno()">
+        <input type="text" id="cpfAluno" placeholder="CPF do Aluno (somente números)">
+        <input type="text" id="nomeAluno" placeholder="Nome do Aluno">
+        <input type="number" id="idadeAluno" placeholder="Idade">
+        <input type="text" id="planoAluno" placeholder="Plano (mensal/trimestral/etc)">
+        <input type="submit" value="Cadastrar Aluno">
+      </form>
+    
+      <h1>Cadastro de Funcionários</h1>
+      <form id="formFuncionario" onsubmit="event.preventDefault(); cadastrarFuncionario()">
+        <input type="text" id="cpfFuncionario" placeholder="CPF do Funcionario (somente numeros)">
+        <input type="text" id="nomeFuncionario" placeholder="Nome do Funcionario">
+        <input type="text" id="cargoFuncionario" placeholder="Cargo (instrutor, recepcionista...)">
+        <input type="submit" value="Cadastrar Funcionario">
+      </form>
+    </div>
+  </main>
+  
   <script>
     async function cadastrarAluno() {
       const cpf = document.getElementById("cpfAluno").value;

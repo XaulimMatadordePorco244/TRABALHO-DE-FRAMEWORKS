@@ -1,47 +1,45 @@
 * {
-    box-sizing: border-box;
-    /* Corrige estouro da largura */
-  }
+  box-sizing: border-box;
+  /* Corrige estouro da largura */
+}
 
-  body {
-    font-family: Arial, sans-serif;
-    /* max-width: 500px; */
-    margin: auto;
-    padding: 20px;
-  }
+body {
+  font-family: Arial, sans-serif;
+  margin: auto;
+  padding: 10px;
+}
 
-  h1 {
-    text-align: center;
-  }
+.container {
+  display: flex;
+  flex-direction: column; /* Um embaixo do outro */
+  align-items: center;     /* Centraliza na horizontal */
+  min-height: 100vh;       /* Faz o conteúdo ocupar toda a altura da tela */
+  gap: 0px;               /* Espaçamento entre os formulários */
+}
+.container h1{
+  color: var(--cor-secundaria)
+}
 
-  form {
-    align-items: center;
-    margin-bottom: 30px;
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    max-width: 30%;
-  }
+form {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
 
-  input {
-    display: block;
-    margin: 10px 0;
-    padding: 8px;
-    width: 100%;
-  }
+input {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  width: 100%;
+}
 
-  input[type="submit"] {
-    background-color: #0061e0;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    /* Borda arredondada no botao */
-    transition: background-color 0.3s;
-  }
-
-  input[type="submit"]:hover {
-    background-color: #004aad;
-  }
+input[type="submit"] {
+  background-color: rgb(0, 95, 204);
+  color: white;
+  border: none;
+  border-radius: 5px;
+}

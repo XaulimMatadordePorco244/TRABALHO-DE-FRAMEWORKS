@@ -18,6 +18,7 @@
   }
 
   .funcionalidade {
+    cursor: pointer;
     background: var(--cor-secundaria);
     padding: 1rem 2rem;
     border-radius: 8px;
@@ -31,7 +32,7 @@
     transform: scale(1.05);
   }
 
-  .funcionalidade a {
+  main a {
     text-decoration: none;
     color: #ffffff;
     font-weight: bold;

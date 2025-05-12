@@ -8,10 +8,6 @@
     <link rel="stylesheet" href="/CSS/deletar_aluno.css">
     <link rel="stylesheet" href="/CSS/cabecalho.css">
 
-<style>
-   
-</style>
-
 </head>
 
 <body>
@@ -21,11 +17,14 @@
     </header>
     <h2>Deletar Cadastro pelo CPF</h2>
 
-    <label for="cpf">CPF:</label>
-    <input type="text" id="cpf" placeholder="Digite o CPF">
-    <button onclick="deletarCadastro()">Deletar</button>
+    <div class="form-container">
+        <form>
+            <input type="text" id="cpf" placeholder="Digite seu CPF">
+            <button onclick="deletarCadastro()">Deletar</button>
+        </form>
+    </div>
 
-    <p id="mensagem"></p>
+    <p>id="mensagem"</p>
 
     <div class="deleted-list">
         <h3>Cadastros Deletados:</h3>
