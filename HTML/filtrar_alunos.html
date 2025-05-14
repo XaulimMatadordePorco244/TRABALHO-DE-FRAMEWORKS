@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="UTF-8">
-  <title>Cadastro de Alunos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filtrar Alunos - GymSystem</title>
   <link rel="stylesheet" href="/CSS/filtrar_alunos.css">
-  <link rel="stylesheet" href="/CSS/cabecalho.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -14,47 +16,65 @@
     <p>Organize sua Academia com Facilidade!</p>
   </header>
 
-  <h2>Pesquisar Alunos</h2>
-  <input type="text" id="cpfBusca" placeholder="Digite o CPF para buscar">
-  <button onclick="buscarAluno()">Buscar</button>
+  <main>
+    <h2>Pesquisar Alunos</h2>
+    <div class="busca-container">
+      <input type="text" id="cpfBusca" placeholder="Digite o CPF para buscar">
+      <button onclick="buscarAluno()">Buscar</button>
+    </div>
+    <div id="mensagemErro" class="alerta"></div>
 
-  <h2>Dados</h2>
-  <table id="tabelaAluno">
-    <thead>
-      <tr>
-        <th>CPF</th>
-        <th>Nome</th>
-        <th>Idade</th>
-        <th>Plano</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Dados inseridos dinamicamente -->
-    </tbody>
-  </table>
+    <h2>Dados</h2>
+    <table id="tabelaAluno">
+      <thead>
+        <tr>
+          <th>CPF</th>
+          <th>Nome</th>
+          <th>Idade</th>
+          <th>Sexo</th>
+          <th>Plano</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dados inseridos dinamicamente -->
+      </tbody>
+    </table>
+  </main>
 
   <script>
-    const alunos = [];
+    const alunos = [
+      { cpf: '123.456.789-00', nome: 'João Silva', idade: 25, sexo: 'Masculino', plano: 'Premium' },
+      { cpf: '987.654.321-00', nome: 'Maria Souza', idade: 30, sexo: 'Feminino', plano: 'Básico' }
+    ];
 
     function buscarAluno() {
       const cpfBusca = document.getElementById('cpfBusca').value;
-      const aluno = alunos.find(aluno => aluno.cpf === cpfBusca);
-
+      const mensagemErro = document.getElementById('mensagemErro');
       const tabela = document.getElementById('tabelaAluno').getElementsByTagName('tbody')[0];
-      tabela.innerHTML = ''; // Limpa a tabela antes de mostrar
+      
+      tabela.innerHTML = '';
+      mensagemErro.style.display = 'none';
+
+      if (!cpfBusca) {
+        mensagemErro.textContent = "Por favor, digite um CPF para buscar.";
+        mensagemErro.style.display = 'block';
+        return;
+      }
+
+      const aluno = alunos.find(aluno => aluno.cpf === cpfBusca);
 
       if (aluno) {
         const linha = tabela.insertRow();
-        linha.insertCell(0).innerText = aluno.cpf;
-        linha.insertCell(1).innerText = aluno.nome;
-        linha.insertCell(2).innerText = aluno.idade;
-        linha.insertCell(3).innerText = aluno.plano;
+        linha.insertCell(0).textContent = aluno.cpf;
+        linha.insertCell(1).textContent = aluno.nome;
+        linha.insertCell(2).textContent = aluno.idade;
+        linha.insertCell(3).textContent = aluno.sexo;
+        linha.insertCell(4).textContent = aluno.plano;
       } else {
-        alert("Aluno não encontrado.");
+        mensagemErro.textContent = "Aluno não encontrado.";
+        mensagemErro.style.display = 'block';
       }
     }
   </script>
-
 </body>
-
 </html>

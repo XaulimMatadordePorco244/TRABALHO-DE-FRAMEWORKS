@@ -15,46 +15,71 @@
         <p>Organize sua Academia com Facilidade!</p>
     </header>
     
-    <!-- Conteúdo principal da página -->
-
-    
-    <div id="lista-estudantes">
-        <h1>Lista de Alunos</h1>
-    </div>
-
-    <script>
-        async function listarEstudantes() {
-            try {
-                const resposta = await fetch("http://localhost:8000/estudantes");
-                const estudantes = await resposta.json();
-
-                const div = document.getElementById("lista-estudantes");
-                div.innerHTML = "";
-
-                if (estudantes.length === 0) {
-                    div.innerHTML = "<p>Nenhum estudante cadastrado.</p>";
-                    return;
-                }
-
-                const ul = document.createElement("ul");
-                estudantes.forEach(est => {
-                    const li = document.createElement("li");
-                    li.textContent = `ID: ${est.id} | Nome: ${est.nome}`;
-                    ul.appendChild(li);
-                });
-
-                div.appendChild(ul);
-            } catch (erro) {
-                console.log(erro);
-                //alert("Erro ao buscar lista de estudantes.");
-            }
-        }
-
-        // Chama a função ao carregar a página
-        window.onload = listarEstudantes;
-
-
-    </script>
+    <main>
+        <div id="lista-estudantes">
+            <h1>Lista de Alunos</h1>
+            
+            <div class="busca-container">
+                <input type="text" id="busca-aluno" placeholder="Pesquisar aluno por nome ou CPF...">
+                <button id="btn-buscar">Buscar</button>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>CPF</th>
+                        <th>Nome</th>
+                        <th>Idade</th>
+                        <th>Plano</th>
+                        <th>Vencimento</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="cpf">123.456.789-00</td>
+                        <td>João Silva</td>
+                        <td>25</td>
+                        <td>Premium</td>
+                        <td>15/06/2023</td>
+                        <td class="status-ativo">Ativo</td>
+                    </tr>
+                    <tr>
+                        <td class="cpf">987.654.321-00</td>
+                        <td>Maria Oliveira</td>
+                        <td>32</td>
+                        <td>Básico</td>
+                        <td>22/05/2023</td>
+                        <td class="status-ativo">Ativo</td>
+                    </tr>
+                    <tr>
+                        <td class="cpf">456.789.123-00</td>
+                        <td>Carlos Souza</td>
+                        <td>28</td>
+                        <td>Intermediário</td>
+                        <td>10/07/2023</td>
+                        <td class="status-ativo">Ativo</td>
+                    </tr>
+                    <tr>
+                        <td class="cpf">789.123.456-00</td>
+                        <td>Ana Costa</td>
+                        <td>35</td>
+                        <td>Premium</td>
+                        <td>30/04/2023</td>
+                        <td class="status-inativo">Inativo</td>
+                    </tr>
+                    <tr>
+                        <td class="cpf">321.654.987-00</td>
+                        <td>Pedro Santos</td>
+                        <td>22</td>
+                        <td>Básico</td>
+                        <td>18/06/2023</td>
+                        <td class="status-ativo">Ativo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
 </body>
 
 </html>

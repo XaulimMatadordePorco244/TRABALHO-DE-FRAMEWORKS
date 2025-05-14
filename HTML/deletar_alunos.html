@@ -1,74 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VAI SER SÓ PÁ NAS CANJHANGA</title>
-    <link rel="stylesheet" href="/CSS/deletar_aluno.css">
-    <link rel="stylesheet" href="/CSS/cabecalho.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deletar Aluno - GymSystem</title>
+  <link rel="stylesheet" href="/CSS/deletar_aluno.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <header>
-        <h1>GymSystem</h1>
-        <p>Organize sua Academia com Facilidade!</p>
-    </header>
+  <header>
+    <h1>GymSystem</h1>
+    <p>Organize sua Academia com Facilidade!</p>
+  </header>
+
+  <main>
     <h2>Deletar Cadastro pelo CPF</h2>
 
     <div class="form-container">
-        <form>
-            <input type="text" id="cpf" placeholder="Digite seu CPF">
-            <button onclick="deletarCadastro()">Deletar</button>
-        </form>
+      <form id="formDeletar">
+        <input type="text" id="cpf" placeholder="Digite o CPF do aluno" required>
+        <button type="submit">Deletar Cadastro</button>
+      </form>
     </div>
 
-    <p>id="mensagem"</p>
+    <div id="mensagem"></div>
 
     <div class="deleted-list">
-        <h3>Cadastros Deletados:</h3>
-        <ul id="listaDeletados"></ul>
+      <h3>Cadastros Deletados:</h3>
+      <ul id="listaDeletados"></ul>
     </div>
+  </main>
 
-    <script>
-        // Simulação de cadastros
-        const cadastros = [
-            { nome: "Ana Souza", cpf: "11111111111" },
-            { nome: "Carlos Lima", cpf: "22222222222" },
-            { nome: "Mariana Rocha", cpf: "33333333333" },
-        ];
+  <script>
+    // Simulação de cadastros
+    const cadastros = [
+    { nome: "Ana Souza", cpf: "11111111111", idade: 28, plano: "Mensal", vencimento: "2025-06-01", status: "Ativo" },
+    { nome: "Carlos Lima", cpf: "22222222222", idade: 35, plano: "Trimestral", vencimento: "2025-08-10", status: "Inadimplente" },
+    { nome: "Mariana Rocha", cpf: "33333333333", idade: 22, plano: "Anual", vencimento: "2026-01-15", status: "Ativo" },
+];
+    const deletados = [];
+    const form = document.getElementById('formDeletar');
+    const mensagem = document.getElementById('mensagem');
 
-        const deletados = [];
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const cpfInput = document.getElementById('cpf').value.trim();
+      
+      if (!cpfInput) {
+        mostrarMensagem("Por favor, digite um CPF válido.", "erro");
+        return;
+      }
 
-        function deletarCadastro() {
-            const cpfInput = document.getElementById('cpf').value.trim();
-            const index = cadastros.findIndex(c => c.cpf === cpfInput);
+      const index = cadastros.findIndex(c => c.cpf === cpfInput);
 
-            if (index !== -1) {
-                const pessoaRemovida = cadastros.splice(index, 1)[0];
-                deletados.push(pessoaRemovida.nome);
+      if (index !== -1) {
+        const pessoaRemovida = cadastros.splice(index, 1)[0];
+        deletados.push(pessoaRemovida);
+        
+        mostrarMensagem(`Cadastro de ${pessoaRemovida.nome} deletado com sucesso.`, "sucesso");
+        atualizarListaDeletados();
+      } else {
+        mostrarMensagem("CPF não encontrado no sistema.", "erro");
+      }
 
-                document.getElementById('mensagem').textContent = `Cadastro de ${pessoaRemovida.nome} deletado com sucesso.`;
-                atualizarListaDeletados();
-            } else {
-                document.getElementById('mensagem').textContent = "CPF não encontrado.";
-            }
+      form.reset();
+    });
 
-            document.getElementById('cpf').value = '';
-        }
+    function mostrarMensagem(texto, tipo) {
+      mensagem.textContent = texto;
+      mensagem.className = tipo;
+    }
 
-        function atualizarListaDeletados() {
-            const lista = document.getElementById('listaDeletados');
-            lista.innerHTML = "";
-            deletados.forEach(nome => {
-                const li = document.createElement("li");
-                li.textContent = nome;
-                lista.appendChild(li);
-            });
-        }
-    </script>
-
+    function atualizarListaDeletados() {
+    const lista = document.getElementById('listaDeletados');
+    lista.innerHTML = "";
+    deletados.forEach(pessoa => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <strong>Nome:</strong> ${pessoa.nome}<br>
+            <strong>Idade:</strong> ${pessoa.idade}<br>
+            <strong>Plano:</strong> ${pessoa.plano}<br>
+            <strong>Vencimento:</strong> ${pessoa.vencimento}<br>
+            <strong>Status:</strong> ${pessoa.status}<br>
+            <hr>
+        `;
+        lista.appendChild(li);
+    });
+}
+  </script>
 </body>
-
 </html>

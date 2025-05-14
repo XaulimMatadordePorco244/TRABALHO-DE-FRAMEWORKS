@@ -1,103 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Alunos</title>
+  <title>Cadastro de Aluno</title>
   <link rel="stylesheet" href="/CSS/cadastrar_alunos.css">
-  <link rel="stylesheet" href="/CSS/cabecalho.css">
-
 </head>
-
 <body>
+
   <header>
-    <h1>GymSystem</h1>
-    <p>Organize sua Academia com Facilidade!</p>
+    <h1>Cadastro de Aluno</h1>
+    <p>Preencha os dados abaixo para cadastrar o aluno</p>
   </header>
 
   <main>
-    <div class="container">
-      <h1>Cadastro de Alunos</h1>
-      <form id="formAluno" onsubmit="event.preventDefault(); cadastrarAluno()">
-        <input type="text" id="cpfAluno" placeholder="CPF do Aluno (somente números)">
-        <input type="text" id="nomeAluno" placeholder="Nome do Aluno">
-        <input type="number" id="idadeAluno" placeholder="Idade">
-        <input type="text" id="planoAluno" placeholder="Plano (mensal/trimestral/etc)">
-        <input type="submit" value="Cadastrar Aluno">
-      </form>
-    
-      <h1>Cadastro de Funcionários</h1>
-      <form id="formFuncionario" onsubmit="event.preventDefault(); cadastrarFuncionario()">
-        <input type="text" id="cpfFuncionario" placeholder="CPF do Funcionario (somente numeros)">
-        <input type="text" id="nomeFuncionario" placeholder="Nome do Funcionario">
-        <input type="text" id="cargoFuncionario" placeholder="Cargo (instrutor, recepcionista...)">
-        <input type="submit" value="Cadastrar Funcionario">
-      </form>
-    </div>
+    <form action="/cadastro" method="POST">
+      <label for="nome">Nome: 
+        <input type="text" name="nome" id="nome" required>
+      </label>
+
+      <label for="idade">Idade: 
+        <input type="number" name="idade" id="idade" required>
+      </label>
+
+      <label for="plano">Plano: 
+        <input type="text" name="plano" id="plano" required>
+      </label>
+
+      <label for="vencimento">Vencimento: 
+        <input type="date" name="vencimento" id="vencimento" required>
+      </label>
+
+      <label for="status">Status:
+        <select name="status" id="status" required>
+          <option value="Ativo">Ativo</option>
+          <option value="Inativo">Inativo</option>
+        </select>
+      </label>
+
+      <button type="submit">Cadastrar</button>
+    </form>
+
+    <div id="mensagem-sucesso"></div>
   </main>
-  
+
+  <footer>
+    <p>&copy; 2025 GymSystem | Todos os direitos reservados</p>
+  </footer>
+
   <script>
-    async function cadastrarAluno() {
-      const cpf = document.getElementById("cpfAluno").value;
-      const nome = document.getElementById("nomeAluno").value;
-      const idade = document.getElementById("idadeAluno").value;
-      const plano = document.getElementById("planoAluno").value;
-
-      const aluno = { cpf, nome, idade, plano };
-
-      try {
-        const resposta = await fetch("http://localhost:8000/alunos", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(aluno)
-        });
-
-        const dados = await resposta.json();
-
-        if (resposta.status === 200) {
-          alert("Aluno cadastrado com sucesso!");
-        } else {
-          alert("Erro ao cadastrar aluno: " + dados.mensagem);
-        }
-      } catch (erro) {
-        console.error("Erro na requisicao:", erro);
-        alert("Erro na requisicao. Verifique se o back-end esta rodando.");
-      }
-    }
-
-    async function cadastrarFuncionario() {
-      const cpf = document.getElementById("cpfFuncionario").value;
-      const nome = document.getElementById("nomeFuncionario").value;
-      const cargo = document.getElementById("cargoFuncionario").value;
-
-      const funcionario = { cpf, nome, cargo };
-
-      try {
-        const resposta = await fetch("http://localhost:8000/funcionarios", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(funcionario)
-        });
-
-        const dados = await resposta.json();
-
-        if (resposta.status === 200) {
-          alert("Funcionario cadastrado com sucesso!");
-        } else {
-          alert("Erro ao cadastrar funcionario: " + dados.mensagem);
-        }
-      } catch (erro) {
-        console.error("Erro na requisicao:", erro);
-        alert("Erro na requisicao. Verifique se o back-end esta rodando.");
-      }
+    if (.get("mensagem") === "sucesso") {
+      document.getElementById("mensagem-sucesso").innerText = "Aluno cadastrado com sucesso!";
     }
   </script>
 
 </body>
-
 </html>

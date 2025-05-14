@@ -21,7 +21,7 @@ app.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
   reply.send("Fastify Funcionando");
 });
 
-// Rota GET para listar estudantes (exemplo de leitura)
+// Rota GET para listar estudantes (usada no listar_alunos.html)
 app.get('/estudantes', async (request: FastifyRequest, reply: FastifyReply) => {
   try {
     const conn = await conectar();
@@ -42,23 +42,8 @@ app.post('/alunos', async (request: FastifyRequest, reply: FastifyReply) => {
       "INSERT INTO alunos (cpf, nome, idade, plano) VALUES (?, ?, ?, ?)",
       [cpf, nome, idade, plano]
     );
+    // ✅ Mensagem de sucesso já existe
     reply.status(200).send({ mensagem: "Aluno cadastrado com sucesso!" });
-  } catch (erro: any) {
-    tratarErroMySQL(erro, reply);
-  }
-});
-
-// Rota POST para cadastrar funcionários
-app.post('/funcionarios', async (request: FastifyRequest, reply: FastifyReply) => {
-  const { cpf, nome, cargo } = request.body as any;
-
-  try {
-    const conn = await conectar();
-    await conn.query(
-      "INSERT INTO funcionarios (cpf, nome, cargo, horario) VALUES (?, ?, ?, ?)",
-      [cpf, nome, cargo, ""]
-    );
-    reply.status(200).send({ mensagem: "Funcionário cadastrado com sucesso!" });
   } catch (erro: any) {
     tratarErroMySQL(erro, reply);
   }
@@ -88,4 +73,5 @@ app.listen({ port: 8000 }, (err, address) => {
   }
   console.log(`Servidor rodando em ${address}`);
 });
+
 
