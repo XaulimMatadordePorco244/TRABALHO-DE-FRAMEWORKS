@@ -9,12 +9,19 @@
 <body>
 
   <header>
-    <h1>Cadastro de Aluno</h1>
-    <p>Preencha os dados abaixo para cadastrar o aluno</p>
+    <h1>GymSystem</h1>
+    <p>Organize sua Academia com Facilidade!</p>
   </header>
 
   <main>
+    <h1>Cadastro de Aluno</h1>
+    <p>Preencha os dados abaixo para cadastrar o aluno</p>
+
     <form action="/cadastro" method="POST">
+      <label for="nome">CPF: 
+        <input type="text" name="cpf" id="cpf" required>
+      </label>
+
       <label for="nome">Nome: 
         <input type="text" name="nome" id="nome" required>
       </label>
@@ -24,7 +31,11 @@
       </label>
 
       <label for="plano">Plano: 
-        <input type="text" name="plano" id="plano" required>
+        <select name="status" id="status" required>
+          <option value="basico">Básico</option>
+          <option value="intermediario">Intermediário</option>
+          <option value="premium">Premium</option>
+        </select>
       </label>
 
       <label for="vencimento">Vencimento: 
@@ -33,8 +44,8 @@
 
       <label for="status">Status:
         <select name="status" id="status" required>
-          <option value="Ativo">Ativo</option>
-          <option value="Inativo">Inativo</option>
+          <option value="ativo">Ativo</option>
+          <option value="inativo">Inativo</option>
         </select>
       </label>
 
@@ -49,9 +60,6 @@
   </footer>
 
   <script>
-    if (.get("mensagem") === "sucesso") {
-      document.getElementById("mensagem-sucesso").innerText = "Aluno cadastrado com sucesso!";
-    }
   </script>
 
 </body>

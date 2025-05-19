@@ -1,187 +1,163 @@
-:root {
-    /* Cores base */
-    --cor-primaria: #0D0D0D;
-    --cor-secundaria: #1A1A1A;
-    --cor-terciaria: #252525;
-    
-    /* Cores de destaque */
-    --cor-destaque: #00E6A0;
-    --cor-destaque-escuro: #00B383;
-    --cor-destaque-claro: #00FFB3;
-    
-    /* Texto */
-    --cor-texto-primario: #F0F0F0;
-    --cor-texto-secundario: #B3B3B3;
-    
-    /* Feedback */
-    --cor-sucesso: #00C896;
-    --cor-alerta: #FF6B6B;
-    --cor-aviso: #FFD166;
-    
-    /* Efeitos */
-    --sombra-neon: 0 0 8px rgba(0, 230, 160, 0.5);
-    --sombra-padrao: 0 4px 6px rgba(0, 0, 0, 0.3);
-    
-    /* Tipografia */
-    --fonte-principal: 'Roboto', 'Segoe UI', system-ui, sans-serif;
-  }
-  
-  /* Reset e Estilos Globais */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: var(--fonte-principal);
-    background-color: var(--cor-primaria);
-    color: var(--cor-texto-primario);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  header {
-    background-color: var(--cor-secundaria);
-    padding: 2rem;
-    text-align: center;
-    box-shadow: var(--sombra-padrao);
-    border-bottom: 1px solid var(--cor-terciaria);
-  }
-  
-  header h1 {
-    color: var(--cor-destaque);
-    margin: 0;
-    font-size: 2.5rem;
-  }
-  
-  header p {
-    color: var(--cor-texto-secundario);
-    margin: 0.5rem 0 0;
-    font-size: 1.2rem;
-  }
-  
-  /* Conteúdo Principal */
-  main {
-    padding: 2rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  h2 {
-    color: var(--cor-texto-primario);
-    margin: 1rem 0 2rem;
-    font-size: 1.8rem;
-    text-align: center;
-  }
-  
-  /* Formulário */
-  .form-container {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto 2rem;
-  }
-  
-  form {
-    background-color: var(--cor-secundaria);
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: var(--sombra-padrao);
-    border: 1px solid var(--cor-terciaria);
-  }
-  
-  input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    margin-bottom: 1.5rem;
-    background-color: var(--cor-primaria);
-    color: var(--cor-texto-primario);
-    border: 1px solid var(--cor-terciaria);
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-  }
-  
-  input:focus {
-    outline: none;
-    border-color: var(--cor-destaque);
-    box-shadow: var(--sombra-neon);
-  }
-  
-  button {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: var(--cor-alerta);
-    color: var(--cor-texto-primario);
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #ff5252;
-    transform: translateY(-2px);
-  }
-  
-  button:active {
-    transform: translateY(0);
-  }
-  
-  /* Mensagens */
-  #mensagem {
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 6px;
-    text-align: center;
-    font-weight: 500;
-    width: 100%;
-    max-width: 500px;
-  }
-  
-  /* Lista de Deletados */
+@import '/CSS/root.css';
+/* Reset e Estilos Globais */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--fonte-principal);
+  background-color: var(--cor-primaria);
+  color: var(--cor-texto-primario);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background-color: var(--cor-secundaria);
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--sombra-padrao);
+  border-bottom: 1px solid var(--cor-terciaria);
+}
+
+header h1 {
+  color: var(--cor-destaque);
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+header p {
+  color: var(--cor-texto-secundario);
+  margin: 0.5rem 0 0;
+  font-size: 1.2rem;
+}
+
+/* Conteúdo Principal */
+main {
+  padding: 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h2 {
+  color: var(--cor-texto-primario);
+  margin: 1rem 0 2rem;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+/* Formulário */
+.form-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+}
+
+form {
+  background-color: var(--cor-secundaria);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: var(--sombra-padrao);
+  border: 1px solid var(--cor-terciaria);
+}
+
+input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--cor-primaria);
+  color: var(--cor-texto-primario);
+  border: 1px solid var(--cor-terciaria);
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--cor-destaque);
+  box-shadow: var(--sombra-neon);
+}
+
+button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--cor-alerta);
+  color: var(--cor-texto-primario);
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff5252;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Mensagens */
+#mensagem {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 500;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Lista de Deletados */
+.deleted-list {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 2rem;
+  background-color: var(--cor-secundaria);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: var(--sombra-padrao);
+}
+
+.deleted-list h3 {
+  color: var(--cor-texto-primario);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+#listaDeletados {
+  list-style-type: none;
+}
+
+#listaDeletados li {
+  padding: 0.5rem 0;
+  color: var(--cor-texto-secundario);
+  border-bottom: 1px solid var(--cor-terciaria);
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+
+  .form-container,
+  #mensagem,
   .deleted-list {
-    width: 100%;
-    max-width: 500px;
-    margin-top: 2rem;
-    background-color: var(--cor-secundaria);
+    width: 90%;
+  }
+
+  form {
     padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: var(--sombra-padrao);
   }
-  
-  .deleted-list h3 {
-    color: var(--cor-texto-primario);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+
+  h2 {
+    font-size: 1.5rem;
   }
-  
-  #listaDeletados {
-    list-style-type: none;
-  }
-  
-  #listaDeletados li {
-    padding: 0.5rem 0;
-    color: var(--cor-texto-secundario);
-    border-bottom: 1px solid var(--cor-terciaria);
-  }
-  
-  /* Responsividade */
-  @media (max-width: 600px) {
-    .form-container, #mensagem, .deleted-list {
-      width: 90%;
-    }
-    
-    form {
-      padding: 1.5rem;
-    }
-    
-    h2 {
-      font-size: 1.5rem;
-    }
-  }
+}

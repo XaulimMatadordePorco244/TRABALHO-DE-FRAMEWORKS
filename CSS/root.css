@@ -1,0 +1,30 @@
+:root {
+    /* Cores base - Tons de Preto */
+    --cor-primaria: #121212;
+    --cor-secundaria: #1E1E1E;
+    --cor-terciaria: #2A2A2A;
+    
+    /* Cores de destaque - Tons de Azul */
+    --cor-destaque: #1B98E0;
+    --cor-destaque-escuro: #006494;
+    --cor-destaque-claro: #5AB0E5;
+    
+    /* Texto */
+    --cor-texto-primario: #F5F5F5;
+    --cor-texto-secundario: #B0B0B0;
+    
+    /* Feedback (ajustados para harmonizar) */
+    --cor-sucesso: #00C896;
+    --cor-alerta: #FF6B6B;
+    --cor-aviso: #FFD166;
+    
+    /* Efeitos */
+    --sombra-neon: 0 0 8px rgba(27, 152, 224, 0.5);
+    --sombra-padrao: 0 4px 6px rgba(0, 0, 0, 0.3);
+    
+    /* Tipografia (mantida) */
+    --fonte-principal: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+    --tamanho-texto: 1rem;
+    --tamanho-titulo: 2rem;
+    --tamanho-subtitulo: 1.2rem;
+  }

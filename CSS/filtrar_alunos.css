@@ -1,34 +1,4 @@
-:root {
-  /* Cores base */
-  --cor-primaria: #0D0D0D;
-  --cor-secundaria: #1A1A1A;
-  --cor-terciaria: #252525;
-  
-  /* Cores de destaque */
-  --cor-destaque: #00E6A0;
-  --cor-destaque-escuro: #00B383;
-  --cor-destaque-claro: #00FFB3;
-  
-  /* Texto */
-  --cor-texto-primario: #F0F0F0;
-  --cor-texto-secundario: #B3B3B3;
-  
-  /* Feedback */
-  --cor-sucesso: #00C896;
-  --cor-alerta: #FF6B6B;
-  --cor-aviso: #FFD166;
-  
-  /* Efeitos */
-  --sombra-neon: 0 0 8px rgba(0, 230, 160, 0.5);
-  --sombra-padrao: 0 4px 6px rgba(0, 0, 0, 0.3);
-  
-  /* Tipografia */
-  --fonte-principal: 'Roboto', 'Segoe UI', system-ui, sans-serif;
-  --tamanho-texto: 1rem;
-  --tamanho-titulo: 2rem;
-  --tamanho-subtitulo: 1.2rem;
-}
-
+@import '/CSS/root.css';
 /* Reset e Estilos Globais */
 * {
   margin: 0;
@@ -140,7 +110,8 @@ table {
   overflow: hidden;
 }
 
-th, td {
+th,
+td {
   padding: 1rem;
   text-align: center;
   border: 1px solid var(--cor-terciaria);
@@ -179,17 +150,18 @@ tr:hover {
     flex-direction: column;
     width: 100%;
   }
-  
+
   input[type="text"] {
     width: 100%;
   }
-  
+
   table {
     width: 100%;
     font-size: 0.9rem;
   }
-  
-  th, td {
+
+  th,
+  td {
     padding: 0.75rem 0.5rem;
   }
 }

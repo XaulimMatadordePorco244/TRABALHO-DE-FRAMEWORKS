@@ -1,27 +1,4 @@
-:root {
-  --cor-primaria: #0D0D0D;
-  --cor-secundaria: #1A1A1A;
-  --cor-terciaria: #252525;
-
-  --cor-destaque: #00E6A0;
-  --cor-destaque-escuro: #00B383;
-  --cor-destaque-claro: #00FFB3;
-
-  --cor-texto-primario: #F0F0F0;
-  --cor-texto-secundario: #B3B3B3;
-
-  --cor-sucesso: #00C896;
-  --cor-alerta: #FF6B6B;
-  --cor-aviso: #FFD166;
-
-  --sombra-neon: 0 0 8px rgba(0, 230, 160, 0.5);
-  --sombra-padrao: 0 4px 6px rgba(0, 0, 0, 0.3);
-
-  --fonte-principal: 'Roboto', 'Segoe UI', system-ui, sans-serif;
-  --tamanho-texto: 1rem;
-  --tamanho-titulo: 2.5rem;
-  --tamanho-subtitulo: 1.2rem;
-}
+@import '/CSS/root.css';
 
 * {
   margin: 0;
@@ -42,7 +19,15 @@ body {
   padding: 2rem;
 }
 
-h1 {
+header {
+    background-color: var(--cor-secundaria);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--sombra-padrao);
+    border-bottom: 1px solid var(--cor-terciaria);
+  }
+
+main h1 {
   font-size: var(--tamanho-titulo);
   color: var(--cor-destaque);
   margin-bottom: 2rem;
@@ -111,7 +96,7 @@ button[type="submit"]:hover {
     padding: 1.5rem;
   }
 
-  h1 {
+  main h1 {
     font-size: 2rem;
   }
 
