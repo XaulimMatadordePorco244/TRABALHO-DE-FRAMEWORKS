@@ -19,7 +19,7 @@ body {
 header {
   background-color: var(--cor-secundaria);
   padding: 2rem;
-  text-align: center;
+  /*text-align: center;*/
   box-shadow: var(--sombra-padrao);
   border-bottom: 1px solid var(--cor-terciaria);
 }

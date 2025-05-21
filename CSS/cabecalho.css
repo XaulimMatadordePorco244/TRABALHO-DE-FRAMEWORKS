@@ -22,6 +22,100 @@
   --tamanho-titulo: 2.5rem;
   --tamanho-subtitulo: 1.2rem;
 }
+
+/* Menu lateral direito - versão compacta */
+/* Menu toggle (☰) - Botão principal (direito) */
+.menu-toggle {
+  position: fixed;
+  right: 1rem;
+  top: 1.5rem;
+  font-size: 2rem;
+  color: var(--cor-destaque);
+  cursor: pointer;
+  z-index: 1003;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+}
+
+.menu-lateral {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Inicia fora da tela */
+  /*width: auto; /* Largura automática */
+  min-width: 200px; /* Largura mínima */
+  height: 100%;
+  background-color: var(--cor-secundaria);
+  box-shadow: var(--sombra-padrao);
+  padding: 1rem;
+  transition: right 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-lateral.aberto {
+  right: 0;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;  /* Alterado de right para left */
+  background: none;
+  border: none;
+  color: var(--cor-texto-primario);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1002;
+}
+
+.close-btn:hover {
+  color: var(--cor-destaque);
+}
+
+.menu-lateral {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: auto;
+  min-width: 200px;
+  height: 100%;
+  background-color: var(--cor-secundaria);
+  box-shadow: var(--sombra-padrao);
+  padding: 4rem 1rem 1rem 1rem;
+  transition: right 0.3s ease;
+  z-index: 1001;
+}
+
+.menu-lateral ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.menu-lateral ul li {
+  white-space: nowrap; /* Impede que o texto quebre */
+  margin-bottom: 0.5rem;
+}
+
+.menu-lateral ul li a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: var(--cor-texto-primario);
+  text-decoration: none;
+  transition: all 0.3s;
+  border-radius: 4px;
+  width: fit-content; /* Ajusta ao conteúdo */
+}
+
+.menu-lateral ul li a:hover {
+  background-color: var(--cor-destaque);
+  color: var(--cor-primaria);
+  transform: translateX(-5px);
+}
   
   body {
       font-family: Arial, sans-serif;

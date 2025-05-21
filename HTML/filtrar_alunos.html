@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,62 +20,102 @@
   <main>
     <h2>Pesquisar Alunos</h2>
     <div class="busca-container">
-      <input type="text" id="cpfBusca" placeholder="Digite o CPF para buscar">
+      <select id="filtroBusca" onchange="mudarTipoBusca()">
+        <option value="cpf">CPF</option>
+        <option value="nome">Nome</option>
+        <option value="idade">Idade</option>
+        <option value="plano">Plano</option>
+        <option value="data_vencimento">Vencimento</option>
+        <option value="status">Status</option>
+      </select>
+
+      <div id="campoBusca">
+        <input type="text" id="valorBusca" placeholder="Digite o CPF para buscar">
+      </div>
+
       <button onclick="buscarAluno()">Buscar</button>
     </div>
-    <div id="mensagemErro" class="alerta"></div>
 
-    <h2>Dados</h2>
-    <table id="tabelaAluno">
-      <thead>
-        <tr>
-          <th>CPF</th>
-          <th>Nome</th>
-          <th>Idade</th>
-          <th>Sexo</th>
-          <th>Plano</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Dados inseridos dinamicamente -->
-      </tbody>
-    </table>
+    <div id="resultadoBusca"></div>
   </main>
 
   <script>
-    const alunos = [
-      { cpf: '123.456.789-00', nome: 'João Silva', idade: 25, sexo: 'Masculino', plano: 'Premium' },
-      { cpf: '987.654.321-00', nome: 'Maria Souza', idade: 30, sexo: 'Feminino', plano: 'Básico' }
-    ];
+    function mudarTipoBusca() {
+      const filtro = document.getElementById('filtroBusca').value;
+      const campoBusca = document.getElementById('campoBusca');
 
-    function buscarAluno() {
-      const cpfBusca = document.getElementById('cpfBusca').value;
-      const mensagemErro = document.getElementById('mensagemErro');
-      const tabela = document.getElementById('tabelaAluno').getElementsByTagName('tbody')[0];
-      
-      tabela.innerHTML = '';
-      mensagemErro.style.display = 'none';
-
-      if (!cpfBusca) {
-        mensagemErro.textContent = "Por favor, digite um CPF para buscar.";
-        mensagemErro.style.display = 'block';
-        return;
-      }
-
-      const aluno = alunos.find(aluno => aluno.cpf === cpfBusca);
-
-      if (aluno) {
-        const linha = tabela.insertRow();
-        linha.insertCell(0).textContent = aluno.cpf;
-        linha.insertCell(1).textContent = aluno.nome;
-        linha.insertCell(2).textContent = aluno.idade;
-        linha.insertCell(3).textContent = aluno.sexo;
-        linha.insertCell(4).textContent = aluno.plano;
-      } else {
-        mensagemErro.textContent = "Aluno não encontrado.";
-        mensagemErro.style.display = 'block';
+      switch (filtro) {
+        case 'idade':
+          campoBusca.innerHTML = '<input type="number" id="valorBusca" placeholder="Digite a idade" min="0">';
+          break;
+        case 'data_vencimento':
+          campoBusca.innerHTML = '<input type="date" id="valorBusca">';
+          break;
+        case 'status':
+          campoBusca.innerHTML = `
+            <select id="valorBusca">
+              <option value="">Selecione...</option>
+              <option value="Ativo">Ativo</option>
+              <option value="Inativo">Inativo</option>
+              <option value="Pendente">Pendente</option>
+            </select>`;
+          break;
+        default:
+          campoBusca.innerHTML = '<input type="text" id="valorBusca" placeholder="Digite para buscar">';
       }
     }
+
+async function buscarAluno() {
+  const filtro = document.getElementById('filtroBusca').value;
+  const valor = document.getElementById('valorBusca').value;
+  const resultadoDiv = document.getElementById('resultadoBusca');
+
+  if (!valor) {
+    resultadoDiv.innerHTML = '<p class="erro">Por favor, digite um valor para buscar.</p>';
+    return;
+  }
+
+  // Adiciona loading
+  resultadoDiv.innerHTML = '<p class="carregando">Buscando alunos...</p>';
+
+  try {
+    const response = await fetch(`http://localhost:8000/api/alunos/filtrar?campo=${filtro}&valor=${encodeURIComponent(valor)}`);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Erro na busca');
+    }
+
+    const alunos = await response.json();
+
+    if (alunos.length === 0) {
+      resultadoDiv.innerHTML = '<p class="erro">Nenhum aluno encontrado.</p>';
+      return;
+    }
+
+    let html = '<table class="tabela-resultados"><thead><tr>';
+    html += '<th>CPF</th><th>Nome</th><th>Idade</th><th>Plano</th><th>Vencimento</th><th>Status</th></tr></thead><tbody>';
+
+    alunos.forEach(aluno => {
+      html += `<tr>
+        <td>${aluno.cpf || ''}</td>
+        <td>${aluno.nome || ''}</td>
+        <td>${aluno.idade || ''}</td>
+        <td>${aluno.plano || ''}</td>
+        <td>${formatarData(aluno.data_vencimento)}</td>
+        <td>${aluno.status || ''}</td>
+      </tr>`;
+    });
+
+    html += '</tbody></table>';
+    resultadoDiv.innerHTML = html;
+
+  } catch (error) {
+    console.error('Erro:', error);
+    resultadoDiv.innerHTML = `<p class="erro">Erro ao buscar alunos: ${error.message}</p>`;
+  }
+}
   </script>
 </body>
+
 </html>

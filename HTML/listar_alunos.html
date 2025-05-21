@@ -11,19 +11,24 @@
 
 <body>
     <header>
+        <div class="menu-toggle" id="menu-toggle">&#9776;</div>
         <h1>GymSystem</h1>
         <p>Organize sua Academia com Facilidade!</p>
     </header>
-    
+
+    <nav class="menu-lateral" id="menu-lateral">
+    <button class="close-btn" id="close-btn">&times;</button>
+    <ul>
+        <li><a href="/HTML/tela_inicial.html">Início</a></li>
+        <li><a href="/HTML/cadastrar_alunos.html">Cadastrar Aluno</a></li>
+        <li><a href="/HTML/filtrar_alunos.html">Filtrar Alunos</a></li>
+        <li><a href="/HTML/deletar_alunos.html">Deletar</a></li>
+    </ul>
+</nav>
     <main>
         <div id="lista-estudantes">
             <h1>Lista de Alunos</h1>
-            
-            <div class="busca-container">
-                <input type="text" id="busca-aluno" placeholder="Pesquisar aluno por nome ou CPF...">
-                <button id="btn-buscar">Buscar</button>
-            </div>
-            
+
             <table>
                 <thead>
                     <tr>
@@ -80,6 +85,27 @@
             </table>
         </div>
     </main>
+    <script>
+        const toggle = document.getElementById("menu-toggle");
+const menu = document.getElementById("menu-lateral");
+const closeBtn = document.getElementById("close-btn"); // Adicionado
+
+toggle.addEventListener("click", (e) => {
+  e.stopPropagation();
+  menu.classList.toggle("aberto");
+});
+
+closeBtn.addEventListener("click", (e) => { // Novo listener para o botão de fechar
+  e.stopPropagation();
+  menu.classList.remove("aberto");
+});
+
+document.addEventListener("click", (e) => {
+  if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+    menu.classList.remove("aberto");
+  }
+});
+    </script>
 </body>
 
 </html>
