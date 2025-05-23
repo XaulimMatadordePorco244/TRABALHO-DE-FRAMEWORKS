@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro de Aluno</title>
+  <link rel="stylesheet" href="/CSS/cabecalho.css">
   <link rel="stylesheet" href="/CSS/cadastrar_alunos.css">
 </head>
-<body>
+<body class="cadastro-page">
 
   <header>
     <h1>GymSystem</h1>
@@ -17,42 +18,44 @@
     <h1>Cadastro de Aluno</h1>
     <p>Preencha os dados abaixo para cadastrar o aluno</p>
 
-    <form action="/cadastro" method="POST">
-      <label for="nome">CPF: 
-        <input type="text" name="cpf" id="cpf" placeholder="Somente Números">
-      </label>
+    <div class="card-cadastro">
+      <form action="/cadastro" method="POST">
+        <label for="nome">CPF: 
+          <input type="text" name="cpf" id="cpf" placeholder="Somente Números">
+        </label>
 
-      <label for="nome">Nome: 
-        <input type="text" name="nome" id="nome" required>
-      </label>
+        <label for="nome">Nome: 
+          <input type="text" name="nome" id="nome" required>
+        </label>
 
-      <label for="idade">Idade: 
-        <input type="number" name="idade" id="idade" required>
-      </label>
+        <label for="idade">Idade: 
+          <input type="number" name="idade" id="idade" required>
+        </label>
 
-      <label for="plano">Plano: 
-        <select name="status" id="status" required>
-          <option value="basico">Básico</option>
-          <option value="intermediario">Intermediário</option>
-          <option value="premium">Premium</option>
-        </select>
-      </label>
+        <label for="plano">Plano: 
+          <select name="status" id="status" required>
+            <option value="basico">Básico</option>
+            <option value="intermediario">Intermediário</option>
+            <option value="premium">Premium</option>
+          </select>
+        </label>
 
-      <label for="vencimento">Vencimento: 
-        <input type="date" name="vencimento" id="vencimento" required>
-      </label>
+        <label for="vencimento">Vencimento: 
+          <input type="date" name="vencimento" id="vencimento" required>
+        </label>
 
-      <label for="status">Status:
-        <select name="status" id="status" required>
-          <option value="ativo">Ativo</option>
-          <option value="inativo">Inativo</option>
-        </select>
-      </label>
+        <label for="status">Status:
+          <select name="status" id="status" required>
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+          </select>
+        </label>
 
-      <button type="submit">Cadastrar</button>
-    </form>
+        <button type="submit">Cadastrar</button>
+      </form>
 
-    <div id="mensagem-sucesso"></div>
+      <div id="mensagem-sucesso"></div>
+    </div>
   </main>
 
   <footer>

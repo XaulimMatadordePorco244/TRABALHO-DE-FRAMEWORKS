@@ -1,106 +1,131 @@
+/* CSS para cadastrar_alunos.css */
 @import '/CSS/root.css';
 
-* {
+/* Reset específico para a página de cadastro */
+.cadastro-page * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
+/* Estilos específicos para a página de cadastro */
+.cadastro-page {
+  font-family: var(--fonte-principal);
   background-color: var(--cor-primaria);
   color: var(--cor-texto-primario);
-  font-family: var(--fonte-principal);
-  font-size: var(--tamanho-texto);
-  line-height: 1.6;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* Conteúdo Principal específico para cadastro */
+.cadastro-page main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   padding: 2rem;
 }
 
-header {
-    background-color: var(--cor-secundaria);
-    padding: 2rem;
-    text-align: center;
-    box-shadow: var(--sombra-padrao);
-    border-bottom: 1px solid var(--cor-terciaria);
-  }
-
-main h1 {
-  font-size: var(--tamanho-titulo);
+/* Títulos da página de cadastro */
+.cadastro-page main h1 {
   color: var(--cor-destaque);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.cadastro-page main p {
+  color: var(--cor-texto-secundario);
   margin-bottom: 2rem;
   text-align: center;
 }
 
-form {
+/* Card de Cadastro */
+.card-cadastro {
   background-color: var(--cor-secundaria);
-  padding: 2rem;
+  padding: 2.5rem;
   border-radius: 10px;
   box-shadow: var(--sombra-padrao);
   width: 100%;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  max-width: 550px;
   border: 1px solid var(--cor-terciaria);
 }
 
-label {
+/* Formulário de cadastro */
+.cadastro-page form {
   display: flex;
   flex-direction: column;
-  font-weight: 500;
-  color: var(--cor-texto-primario);
+  gap: 1.2rem;
 }
 
-input, select {
-  padding: 0.75rem;
-  margin-top: 0.25rem;
-  border-radius: 6px;
-  border: 1px solid var(--cor-terciaria);
-  background-color: var(--cor-primaria);
-  color: var(--cor-texto-primario);
+.cadastro-page label {
+  color: var(--cor-texto-secundario);
   font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-button[type="submit"] {
-  background-color: var(--cor-destaque);
-  color: var(--cor-primaria);
-  border: none;
-  padding: 0.75rem;
+.cadastro-page input,
+.cadastro-page select {
+  padding: 0.75rem 1rem;
+  background-color: var(--cor-terciaria);
+  color: var(--cor-texto-primario);
+  border: 1px solid var(--cor-terciaria);
   border-radius: 6px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: var(--sombra-padrao);
+  font-size: var(--tamanho-texto);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-button[type="submit"]:hover {
-  background-color: var(--cor-destaque-claro);
-  transform: translateY(-2px);
+.cadastro-page input:focus,
+.cadastro-page select:focus {
+  outline: none;
+  border-color: var(--cor-destaque);
   box-shadow: var(--sombra-neon);
 }
 
+/* Botão de cadastro */
+.cadastro-page button[type="submit"] {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--cor-destaque);
+  color: var(--cor-primaria);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: var(--tamanho-texto);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.cadastro-page button[type="submit"]:hover {
+  background-color: var(--cor-destaque-claro);
+  transform: translateY(-2px);
+}
+
+.cadastro-page button[type="submit"]:active {
+  background-color: var(--cor-destaque-escuro);
+  transform: translateY(0);
+}
+
+/* Mensagem de sucesso */
 #mensagem-sucesso {
   margin-top: 1.5rem;
-  font-size: 1.1rem;
   color: var(--cor-sucesso);
   text-align: center;
 }
 
-/* Responsivo */
-@media (max-width: 600px) {
-  form {
-    padding: 1.5rem;
-  }
+/* Rodapé específico para cadastro */
+.cadastro-page footer {
+  background-color: var(--cor-secundaria);
+  padding: 1rem;
+  text-align: center;
+  border-top: 1px solid var(--cor-terciaria);
+}
 
-  main h1 {
-    font-size: 2rem;
-  }
-
-  button[type="submit"] {
-    font-size: 1rem;
-  }
+.cadastro-page footer p {
+  color: var(--cor-texto-secundario);
+  margin: 0;
 }

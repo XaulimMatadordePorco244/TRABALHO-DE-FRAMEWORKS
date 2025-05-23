@@ -39,83 +39,92 @@
     <div id="resultadoBusca"></div>
   </main>
 
-  <script>
-    function mudarTipoBusca() {
-      const filtro = document.getElementById('filtroBusca').value;
-      const campoBusca = document.getElementById('campoBusca');
+ <script>
+  function mudarTipoBusca() {
+    const filtro = document.getElementById('filtroBusca').value;
+    const campoBusca = document.getElementById('campoBusca');
 
-      switch (filtro) {
-        case 'idade':
-          campoBusca.innerHTML = '<input type="number" id="valorBusca" placeholder="Digite a idade" min="0">';
-          break;
-        case 'data_vencimento':
-          campoBusca.innerHTML = '<input type="date" id="valorBusca">';
-          break;
-        case 'status':
-          campoBusca.innerHTML = `
-            <select id="valorBusca">
-              <option value="">Selecione...</option>
-              <option value="Ativo">Ativo</option>
-              <option value="Inativo">Inativo</option>
-              <option value="Pendente">Pendente</option>
-            </select>`;
-          break;
-        default:
-          campoBusca.innerHTML = '<input type="text" id="valorBusca" placeholder="Digite para buscar">';
-      }
+    switch (filtro) {
+      case 'idade':
+        campoBusca.innerHTML = '<input type="number" id="valorBusca" placeholder="Digite a idade" min="0">';
+        break;
+      case 'data_vencimento':
+        campoBusca.innerHTML = '<input type="date" id="valorBusca">';
+        break;
+      case 'status':
+        campoBusca.innerHTML = `
+          <select id="valorBusca">
+            <option value="">Selecione...</option>
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+            <option value="Pendente">Pendente</option>
+          </select>`;
+        break;
+      default:
+        campoBusca.innerHTML = '<input type="text" id="valorBusca" placeholder="Digite para buscar">';
     }
-
-async function buscarAluno() {
-  const filtro = document.getElementById('filtroBusca').value;
-  const valor = document.getElementById('valorBusca').value;
-  const resultadoDiv = document.getElementById('resultadoBusca');
-
-  if (!valor) {
-    resultadoDiv.innerHTML = '<p class="erro">Por favor, digite um valor para buscar.</p>';
-    return;
   }
 
-  // Adiciona loading
-  resultadoDiv.innerHTML = '<p class="carregando">Buscando alunos...</p>';
+  async function buscarAluno() {
+    const filtro = document.getElementById('filtroBusca').value;
+    const valor = document.getElementById('valorBusca').value;
+    const resultadoDiv = document.getElementById('resultadoBusca');
 
-  try {
-    const response = await fetch(`http://localhost:8000/api/alunos/filtrar?campo=${filtro}&valor=${encodeURIComponent(valor)}`);
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Erro na busca');
-    }
-
-    const alunos = await response.json();
-
-    if (alunos.length === 0) {
-      resultadoDiv.innerHTML = '<p class="erro">Nenhum aluno encontrado.</p>';
+    if (!valor) {
+      resultadoDiv.innerHTML = '<p class="erro">Por favor, digite um valor para buscar.</p>';
       return;
     }
 
-    let html = '<table class="tabela-resultados"><thead><tr>';
-    html += '<th>CPF</th><th>Nome</th><th>Idade</th><th>Plano</th><th>Vencimento</th><th>Status</th></tr></thead><tbody>';
+    resultadoDiv.innerHTML = '<p class="carregando">Buscando alunos...</p>';
 
-    alunos.forEach(aluno => {
-      html += `<tr>
-        <td>${aluno.cpf || ''}</td>
-        <td>${aluno.nome || ''}</td>
-        <td>${aluno.idade || ''}</td>
-        <td>${aluno.plano || ''}</td>
-        <td>${formatarData(aluno.data_vencimento)}</td>
-        <td>${aluno.status || ''}</td>
-      </tr>`;
-    });
+    try {
+      const response = await fetch(`http://localhost:8000/api/alunos/filtrar?campo=${filtro}&valor=${encodeURIComponent(valor)}`);
 
-    html += '</tbody></table>';
-    resultadoDiv.innerHTML = html;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro na busca');
+      }
 
-  } catch (error) {
-    console.error('Erro:', error);
-    resultadoDiv.innerHTML = `<p class="erro">Erro ao buscar alunos: ${error.message}</p>`;
+      const alunos = await response.json();
+
+      if (alunos.length === 0) {
+        resultadoDiv.innerHTML = '<p class="erro">Nenhum aluno encontrado.</p>';
+        return;
+      }
+
+      let html = '<table class="tabela-resultados"><thead><tr>';
+      html += '<th>CPF</th><th>Nome</th><th>Idade</th><th>Plano</th><th>Vencimento</th><th>Status</th></tr></thead><tbody>';
+
+      alunos.forEach(aluno => {
+        html += `<tr>
+          <td>${aluno.cpf || ''}</td>
+          <td>${aluno.nome || ''}</td>
+          <td>${aluno.idade || ''}</td>
+          <td>${aluno.plano || ''}</td>
+          <td>${formatarData(aluno.data_vencimento)}</td>
+          <td>${aluno.status || ''}</td>
+        </tr>`;
+      });
+
+      html += '</tbody></table>';
+      resultadoDiv.innerHTML = html;
+
+    } catch (error) {
+      console.error('Erro:', error);
+      resultadoDiv.innerHTML = `<p class="erro">Erro ao buscar alunos: ${error.message}</p>`;
+    }
   }
-}
-  </script>
+
+  function formatarData(dataISO) {
+    if (!dataISO) return '';
+    const data = new Date(dataISO);
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const ano = data.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  }
+</script>
+
 </body>
 
 </html>

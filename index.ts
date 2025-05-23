@@ -7,7 +7,7 @@ const dbConfig = {
   host: "localhost",
   user: 'root',
   password: "",
-  database: 'alunos', // Altere para o nome do seu banco de dados
+  database: 'academia', // Altere para o nome do seu banco de dados
   port: 3306,
   waitForConnections: true,
   connectionLimit: 10,
@@ -41,20 +41,19 @@ app.get("/", (request: FastifyRequest, reply: FastifyReply) => {
 });
 
 // Rota para listar alunos
-// app.get("/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
-//   let conn: PoolConnection | null = null;
-//   try {
-//     conn = await pool.getConnection();
-//     const [rows] = await conn.query("SELECT * FROM alunoscadastrados");
-//     reply.status(200).send(rows);
-//   } catch (error: any) {
-//     handleDatabaseError(error, reply);
-//   } finally {
-//     if (conn) conn.release();
-//   }
-// });
+app.get("/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
+  let conn: PoolConnection | null = null;
+  try {
+    conn = await pool.getConnection();
+    const [rows] = await conn.query("SELECT * FROM alunos");
+    reply.status(200).send(rows);
+  } catch (error: any) {
+    handleDatabaseError(error, reply);
+  } finally {
+    if (conn) conn.release();
+  }
+});
 
-//Rota para Filtrar alunos
 // Rota para Filtrar alunos - CORRIGIDA
 app.get("/api/alunos/filtrar", async (request: FastifyRequest, reply: FastifyReply) => {
   const query = request.query as { campo: string, valor: string };
@@ -73,7 +72,7 @@ app.get("/api/alunos/filtrar", async (request: FastifyRequest, reply: FastifyRep
     // Para idade, fazemos comparação exata
     if (campo === 'idade') {
       const [rows] = await conn.query(
-        "SELECT * FROM alunoscadastrados WHERE ?? = ?",
+        "SELECT * FROM alunos WHERE ?? = ?",
         [campo, valor]
       );
       return reply.status(200).send(rows);
@@ -81,7 +80,7 @@ app.get("/api/alunos/filtrar", async (request: FastifyRequest, reply: FastifyRep
     
     // Para outros campos, usamos LIKE para busca parcial
     const [rows] = await conn.query(
-      "SELECT * FROM alunoscadastrados WHERE ?? LIKE ?",
+      "SELECT * FROM alunos WHERE ?? LIKE ?",
       [campo, `%${valor}%`]
     );
     
@@ -94,23 +93,58 @@ app.get("/api/alunos/filtrar", async (request: FastifyRequest, reply: FastifyRep
 });
 
 // Rota para cadastrar aluno
-// app.post("/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
-//   const aluno = request.body as any;
-//   let conn: PoolConnection | null = null;
+app.post("/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
+  const aluno = request.body as any;
+  let conn: PoolConnection | null = null;
   
-//   try {
-//     conn = await pool.getConnection();
-//     const [result] = await conn.query(
-//       "INSERT INTO alunoscadastrados (nome, cpf, idade, data_vencimento, plano, status) VALUES (?, ?, ?, ?, ?, ?)",
-//       [aluno.nome, aluno.cpf, aluno.idade, aluno.data_vencimento, aluno.plano, aluno.status || 'Ativo']
-//     );
-//     reply.status(201).send({ message: "Aluno cadastrado com sucesso", id: (result as any).insertId });
-//   } catch (error: any) {
-//     handleDatabaseError(error, reply);
-//   } finally {
-//     if (conn) conn.release();
-//   }
-// });
+  try {
+    conn = await pool.getConnection();
+    const [result] = await conn.query(
+      "INSERT INTO alunos (nome, cpf, idade, data_vencimento, plano, status) VALUES (?, ?, ?, ?, ?, ?)",
+      [aluno.nome, aluno.cpf, aluno.idade, aluno.data_vencimento, aluno.plano, aluno.status || 'Ativo']
+    );
+    reply.status(201).send({ message: "Aluno cadastrado com sucesso", id: (result as any).insertId });
+  } catch (error: any) {
+    handleDatabaseError(error, reply);
+  } finally {
+    if (conn) conn.release();
+  }
+});
+
+// Rota para deletar aluno por CPF
+app.delete("/alunos/:cpf", async (request: FastifyRequest, reply: FastifyReply) => {
+    const { cpf } = request.params as { cpf: string };
+    let conn: PoolConnection | null = null;
+
+    try {
+        conn = await pool.getConnection();
+        
+        // Primeiro verifica se o aluno existe
+        const [rows] = await conn.query(
+            "SELECT * FROM alunos WHERE cpf = ?", 
+            [cpf]
+        );
+
+        if ((rows as any[]).length === 0) {
+            return reply.status(404).send({ error: "Aluno não encontrado" });
+        }
+
+        // Se existir, deleta
+        const [result] = await conn.query(
+            "DELETE FROM alunos WHERE cpf = ?",
+            [cpf]
+        );
+
+        reply.status(200).send({ 
+            message: "Aluno deletado com sucesso",
+            aluno: (rows as any[])[0] // Retorna os dados do aluno deletado
+        });
+    } catch (error: any) {
+        handleDatabaseError(error, reply);
+    } finally {
+        if (conn) conn.release();
+    }
+});
 
 // Função para tratar erros do banco de dados
 function handleDatabaseError(error: any, reply: FastifyReply) {
@@ -128,6 +162,8 @@ function handleDatabaseError(error: any, reply: FastifyReply) {
     reply.status(500).send({ error: "Erro interno no servidor", details: error.message });
   }
 }
+
+
 
 // Iniciar servidor
 const startServer = async () => {

@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node TS/index.ts",
+    "dev": "ts-node index.ts",
     "start": "node dist/index.js",
     "build": "tsc",
     "prestart": "npm run build"
@@ -13,7 +13,7 @@
     "@fastify/cors": "^11.0.1",
     "@types/dotenv": "^6.1.1",
     "dotenv": "^16.5.0",
-    "fastify": "^4.29.1",
+    "fastify": "^5.3.3",
     "mysql2": "^3.14.1"
   },
   "devDependencies": {
