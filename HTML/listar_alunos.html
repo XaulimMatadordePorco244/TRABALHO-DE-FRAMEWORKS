@@ -4,9 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listagem de Estudantes</title>
-    <link rel="stylesheet" href="/CSS/cabecalho.css">
-    <link rel="stylesheet" href="/CSS/listar_alunos.css">
+    <title>Listagem de Alunos - GymSystem</title>
 </head>
 
 <body>
@@ -17,19 +15,23 @@
     </header>
 
     <nav class="menu-lateral" id="menu-lateral">
-    <button class="close-btn" id="close-btn">&times;</button>
-    <ul>
-        <li><a href="/HTML/tela_inicial.html">Início</a></li>
-        <li><a href="/HTML/cadastrar_alunos.html">Cadastrar Aluno</a></li>
-        <li><a href="/HTML/filtrar_alunos.html">Filtrar Alunos</a></li>
-        <li><a href="/HTML/deletar_alunos.html">Deletar</a></li>
-    </ul>
-</nav>
+        <button class="close-btn" id="close-btn">&times;</button>
+        <ul>
+            <li><a href="/HTML/tela_inicial.html">Início</a></li>
+            <li><a href="/HTML/cadastrar_alunos.html">Cadastrar Aluno</a></li>
+            <li><a href="/HTML/filtrar_alunos.html">Filtrar Alunos</a></li>
+            <li><a href="/HTML/deletar_alunos.html">Deletar</a></li>
+        </ul>
+    </nav>
+
     <main>
         <div id="lista-estudantes">
             <h1>Lista de Alunos</h1>
+            
+            <div id="loading">Carregando alunos...</div>
+            <div id="error-message" style="color: red;"></div>
 
-            <table>
+            <table id="tabela-alunos">
                 <thead>
                     <tr>
                         <th>CPF</th>
@@ -40,71 +42,98 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td class="cpf">123.456.789-00</td>
-                        <td>João Silva</td>
-                        <td>25</td>
-                        <td>Premium</td>
-                        <td>15/06/2023</td>
-                        <td class="status-ativo">Ativo</td>
-                    </tr>
-                    <tr>
-                        <td class="cpf">987.654.321-00</td>
-                        <td>Maria Oliveira</td>
-                        <td>32</td>
-                        <td>Básico</td>
-                        <td>22/05/2023</td>
-                        <td class="status-ativo">Ativo</td>
-                    </tr>
-                    <tr>
-                        <td class="cpf">456.789.123-00</td>
-                        <td>Carlos Souza</td>
-                        <td>28</td>
-                        <td>Intermediário</td>
-                        <td>10/07/2023</td>
-                        <td class="status-ativo">Ativo</td>
-                    </tr>
-                    <tr>
-                        <td class="cpf">789.123.456-00</td>
-                        <td>Ana Costa</td>
-                        <td>35</td>
-                        <td>Premium</td>
-                        <td>30/04/2023</td>
-                        <td class="status-inativo">Inativo</td>
-                    </tr>
-                    <tr>
-                        <td class="cpf">321.654.987-00</td>
-                        <td>Pedro Santos</td>
-                        <td>22</td>
-                        <td>Básico</td>
-                        <td>18/06/2023</td>
-                        <td class="status-ativo">Ativo</td>
-                    </tr>
+                <tbody id="corpo-tabela">
+                    <!-- Os dados serão inseridos aqui via JavaScript -->
                 </tbody>
             </table>
         </div>
     </main>
+
     <script>
+        // Menu lateral
         const toggle = document.getElementById("menu-toggle");
-const menu = document.getElementById("menu-lateral");
-const closeBtn = document.getElementById("close-btn"); // Adicionado
+        const menu = document.getElementById("menu-lateral");
+        const closeBtn = document.getElementById("close-btn");
 
-toggle.addEventListener("click", (e) => {
-  e.stopPropagation();
-  menu.classList.toggle("aberto");
-});
+        toggle.addEventListener("click", (e) => {
+            e.stopPropagation();
+            menu.classList.toggle("aberto");
+        });
 
-closeBtn.addEventListener("click", (e) => { // Novo listener para o botão de fechar
-  e.stopPropagation();
-  menu.classList.remove("aberto");
-});
+        closeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            menu.classList.remove("aberto");
+        });
 
-document.addEventListener("click", (e) => {
-  if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-    menu.classList.remove("aberto");
-  }
-});
+        document.addEventListener("click", (e) => {
+            if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+                menu.classList.remove("aberto");
+            }
+        });
+
+        // Carregar alunos da API
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('http://localhost:8000/alunos');
+                
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar alunos');
+                }
+                
+                const alunos = await response.json();
+                
+                if (alunos.length === 0) {
+                    document.getElementById('error-message').textContent = 'Nenhum aluno cadastrado.';
+                    return;
+                }
+                
+                preencherTabela(alunos);
+                document.getElementById('loading').style.display = 'none';
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-message').textContent = 'Erro ao carregar lista de alunos. Tente recarregar a página.';
+            }
+        });
+
+        function preencherTabela(alunos) {
+            const corpoTabela = document.getElementById('corpo-tabela');
+            corpoTabela.innerHTML = '';
+            
+            alunos.forEach(aluno => {
+                const tr = document.createElement('tr');
+                
+                // Formatar data (se existir)
+                const dataFormatada = aluno.data_vencimento 
+                    ? new Date(aluno.data_vencimento).toLocaleDateString('pt-BR') 
+                    : 'Não informado';
+                
+                // Formatar CPF (se existir)
+                const cpfFormatado = aluno.cpf 
+                    ? formatarCPF(aluno.cpf)
+                    : 'Não informado';
+                
+                tr.innerHTML = `
+                    <td class="cpf">${cpfFormatado}</td>
+                    <td>${aluno.nome || 'Não informado'}</td>
+                    <td>${aluno.idade || 'Não informado'}</td>
+                    <td>${aluno.plano || 'Não informado'}</td>
+                    <td>${dataFormatada}</td>
+                    <td class="status-${aluno.status?.toLowerCase() === 'ativo' ? 'ativo' : 'inativo'}">
+                        ${aluno.status || 'Não informado'}
+                    </td>
+                `;
+                
+                corpoTabela.appendChild(tr);
+            });
+        }
+
+        function formatarCPF(cpf) {
+            if (!cpf) return '';
+            cpf = cpf.toString().replace(/\D/g, '');
+            return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
     </script>
 </body>
 

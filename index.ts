@@ -36,16 +36,21 @@ const app: FastifyInstance = fastify();
 app.register(cors);
 
 // Rotas
-app.get("/", (request: FastifyRequest, reply: FastifyReply) => {
-  reply.send("API GymSystem funcionando!");
-});
-
-// Rota para listar alunos
+// Rota para listar alunos (atualizada para o HTML de listagem)
 app.get("/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
   let conn: PoolConnection | null = null;
   try {
     conn = await pool.getConnection();
-    const [rows] = await conn.query("SELECT * FROM alunos");
+    const [rows] = await conn.query(`
+      SELECT 
+        cpf, 
+        nome, 
+        idade, 
+        plano, 
+        DATE_FORMAT(data_vencimento, '%d/%m/%Y') as data_vencimento, 
+        status 
+      FROM alunos
+    `);
     reply.status(200).send(rows);
   } catch (error: any) {
     handleDatabaseError(error, reply);
@@ -54,8 +59,8 @@ app.get("/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
   }
 });
 
-// Rota para Filtrar alunos - CORRIGIDA
-app.get("/api/alunos/filtrar", async (request: FastifyRequest, reply: FastifyReply) => {
+// Rota para filtrar alunos (ajustada para o HTML de filtro)
+app.get("/filtrar_alunos", async (request: FastifyRequest, reply: FastifyReply) => {
   const query = request.query as { campo: string, valor: string };
   const { campo, valor } = query;
 
@@ -69,22 +74,18 @@ app.get("/api/alunos/filtrar", async (request: FastifyRequest, reply: FastifyRep
   try {
     conn = await pool.getConnection();
     
-    // Para idade, fazemos comparação exata
+    let querySql = "SELECT * FROM alunos WHERE ?? LIKE ?";
+    let params = [campo, `%${valor}%`];
+    
     if (campo === 'idade') {
-      const [rows] = await conn.query(
-        "SELECT * FROM alunos WHERE ?? = ?",
-        [campo, valor]
-      );
-      return reply.status(200).send(rows);
+      querySql = "SELECT * FROM alunos WHERE ?? = ?";
+      params = [campo, parseInt(valor).toString()];
+    } else if (campo === 'data_vencimento') {
+      querySql = "SELECT * FROM alunos WHERE DATE(??) = DATE(?)";
     }
     
-    // Para outros campos, usamos LIKE para busca parcial
-    const [rows] = await conn.query(
-      "SELECT * FROM alunos WHERE ?? LIKE ?",
-      [campo, `%${valor}%`]
-    );
-    
-    return reply.status(200).send(rows);
+    const [rows] = await conn.query(querySql, params);
+    reply.status(200).send(rows);
   } catch (error: any) {
     handleDatabaseError(error, reply);
   } finally {
@@ -92,8 +93,8 @@ app.get("/api/alunos/filtrar", async (request: FastifyRequest, reply: FastifyRep
   }
 });
 
-// Rota para cadastrar aluno
-app.post("/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
+// Rota para cadastrar aluno (ajustada para o HTML de cadastro)
+app.post("/cadastrar_aluno", async (request: FastifyRequest, reply: FastifyReply) => {
   const aluno = request.body as any;
   let conn: PoolConnection | null = null;
   
@@ -101,9 +102,19 @@ app.post("/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
     conn = await pool.getConnection();
     const [result] = await conn.query(
       "INSERT INTO alunos (nome, cpf, idade, data_vencimento, plano, status) VALUES (?, ?, ?, ?, ?, ?)",
-      [aluno.nome, aluno.cpf, aluno.idade, aluno.data_vencimento, aluno.plano, aluno.status || 'Ativo']
+      [
+        aluno.nome,
+        aluno.cpf.replace(/\D/g, ''), // Remove formatação do CPF
+        aluno.idade,
+        aluno.data_vencimento,
+        aluno.plano,
+        aluno.status || 'Ativo'
+      ]
     );
-    reply.status(201).send({ message: "Aluno cadastrado com sucesso", id: (result as any).insertId });
+    reply.status(201).send({ 
+      message: "Aluno cadastrado com sucesso", 
+      id: (result as any).insertId 
+    });
   } catch (error: any) {
     handleDatabaseError(error, reply);
   } finally {
@@ -111,18 +122,19 @@ app.post("/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
   }
 });
 
-// Rota para deletar aluno por CPF
-app.delete("/alunos/:cpf", async (request: FastifyRequest, reply: FastifyReply) => {
+// Rota para deletar aluno (ajustada para o HTML de deleção)
+app.delete("/deletar_aluno/:cpf", async (request: FastifyRequest, reply: FastifyReply) => {
     const { cpf } = request.params as { cpf: string };
     let conn: PoolConnection | null = null;
 
     try {
         conn = await pool.getConnection();
+        const cpfNumerico = cpf.replace(/\D/g, ''); // Remove formatação do CPF
         
         // Primeiro verifica se o aluno existe
         const [rows] = await conn.query(
             "SELECT * FROM alunos WHERE cpf = ?", 
-            [cpf]
+            [cpfNumerico]
         );
 
         if ((rows as any[]).length === 0) {
@@ -130,9 +142,9 @@ app.delete("/alunos/:cpf", async (request: FastifyRequest, reply: FastifyReply) 
         }
 
         // Se existir, deleta
-        const [result] = await conn.query(
+        await conn.query(
             "DELETE FROM alunos WHERE cpf = ?",
-            [cpf]
+            [cpfNumerico]
         );
 
         reply.status(200).send({ 

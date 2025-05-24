@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Deletar Aluno - GymSystem</title>
-  <link rel="stylesheet" href="/CSS/deletar_aluno.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -23,61 +22,100 @@
 
   <div id="mensagem"></div>
   
-  <div>
+  <div id="lista-container">
     <h3>Últimos deletados:</h3>
     <ul id="listaDeletados"></ul>
   </div>
 
   <script>
-    const form = document.getElementById('formDeletar');
-    const mensagem = document.getElementById('mensagem');
-    const listaDeletados = document.getElementById('listaDeletados');
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('formDeletar');
+      const mensagem = document.getElementById('mensagem');
+      const listaDeletados = document.getElementById('listaDeletados');
+      const cpfInput = document.getElementById('cpf');
 
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const cpf = document.getElementById('cpf').value.trim();
+      // Máscara para CPF (apenas números e limita a 11 caracteres)
+      cpfInput.addEventListener('input', function(e) {
+        this.value = this.value.replace(/\D/g, '').slice(0, 11);
+      });
 
-      if (!cpf || !/^\d{11}$/.test(cpf)) {
-        mostrarMensagem("CPF inválido. Digite exatamente 11 números.", "erro");
-        return;
-      }
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const cpf = cpfInput.value.trim();
 
-      try {
-        // 1. Verifica se o aluno existe e deleta
-        const response = await fetch(`http://localhost:8000/alunos/${cpf}`, {
-          method: 'DELETE'
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Erro ao deletar aluno");
+        // Validação do CPF
+        if (!cpf || cpf.length !== 11) {
+          mostrarMensagem("CPF inválido. Digite exatamente 11 números.", "erro");
+          return;
         }
 
-        // 2. Adiciona à lista de deletados
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <strong>Nome:</strong> ${data.aluno.nome}<br>
-          <strong>CPF:</strong> ${data.aluno.cpf}<br>
-          <strong>Plano:</strong> ${data.aluno.plano}
-        `;
-        listaDeletados.prepend(li); // Adiciona no início da lista
+        // Confirmação antes de deletar
+        const confirmacao = confirm(`Tem certeza que deseja deletar o aluno com CPF ${cpf}?`);
+        if (!confirmacao) return;
 
-        mostrarMensagem(data.message, "sucesso");
-        
-      } catch (erro) {
-        mostrarMensagem(erro.message, "erro");
-        console.error(erro);
+        try {
+          // 1. Faz a requisição para deletar o aluno
+          const response = await fetch(`http://localhost:8000/alunos/${cpf}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || "Erro ao deletar aluno");
+          }
+
+          // 2. Adiciona à lista de deletados
+          adicionarAlunoDeletado(data.aluno);
+          mostrarMensagem(data.message, "sucesso");
+          
+        } catch (erro) {
+          mostrarMensagem(erro.message, "erro");
+          console.error("Erro na requisição:", erro);
+        }
+
+        form.reset();
+      });
+
+      function mostrarMensagem(texto, tipo) {
+        mensagem.textContent = texto;
+        mensagem.className = tipo;
+        setTimeout(() => {
+          mensagem.textContent = '';
+          mensagem.className = '';
+        }, 5000);
       }
 
-      form.reset();
-    });
+      function adicionarAlunoDeletado(aluno) {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>Nome:</strong> ${aluno.nome || 'Não informado'}<br>
+          <strong>CPF:</strong> ${formatarCPF(aluno.cpf)}<br>
+          <strong>Plano:</strong> ${aluno.plano || 'Não informado'}<br>
+          <strong>Status:</strong> ${aluno.status || 'Não informado'}
+        `;
+        
+        // Adiciona no início da lista
+        if (listaDeletados.firstChild) {
+          listaDeletados.insertBefore(li, listaDeletados.firstChild);
+        } else {
+          listaDeletados.appendChild(li);
+        }
+        
+        // Limita a lista a 5 itens
+        if (listaDeletados.children.length > 5) {
+          listaDeletados.removeChild(listaDeletados.lastChild);
+        }
+      }
 
-    function mostrarMensagem(texto, tipo) {
-      mensagem.textContent = texto;
-      mensagem.className = tipo;
-      setTimeout(() => mensagem.textContent = '', 5000);
-    }
+      function formatarCPF(cpf) {
+        if (!cpf) return '';
+        return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+      }
+    });
   </script>
 </body>
 </html>

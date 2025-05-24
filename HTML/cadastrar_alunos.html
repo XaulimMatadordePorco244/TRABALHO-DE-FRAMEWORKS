@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro de Aluno</title>
-  <link rel="stylesheet" href="/CSS/cabecalho.css">
-  <link rel="stylesheet" href="/CSS/cadastrar_alunos.css">
 </head>
 <body class="cadastro-page">
 
@@ -19,9 +17,9 @@
     <p>Preencha os dados abaixo para cadastrar o aluno</p>
 
     <div class="card-cadastro">
-      <form action="/cadastro" method="POST">
-        <label for="nome">CPF: 
-          <input type="text" name="cpf" id="cpf" placeholder="Somente Números">
+      <form id="form-cadastro">
+        <label for="cpf">CPF: 
+          <input type="text" name="cpf" id="cpf" placeholder="Somente Números" required>
         </label>
 
         <label for="nome">Nome: 
@@ -33,10 +31,10 @@
         </label>
 
         <label for="plano">Plano: 
-          <select name="status" id="status" required>
-            <option value="basico">Básico</option>
-            <option value="intermediario">Intermediário</option>
-            <option value="premium">Premium</option>
+          <select name="plano" id="plano" required>
+            <option value="Mensal">Mensal</option>
+            <option value="Trimestral">Trimestral</option>
+            <option value="Anual">Anual</option>
           </select>
         </label>
 
@@ -46,8 +44,8 @@
 
         <label for="status">Status:
           <select name="status" id="status" required>
-            <option value="ativo">Ativo</option>
-            <option value="inativo">Inativo</option>
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
           </select>
         </label>
 
@@ -63,6 +61,57 @@
   </footer>
 
   <script>
+    document.getElementById('form-cadastro').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const aluno = {
+        cpf: document.getElementById('cpf').value,
+        nome: document.getElementById('nome').value,
+        idade: document.getElementById('idade').value,
+        plano: document.getElementById('plano').value,
+        data_vencimento: document.getElementById('vencimento').value,
+        status: document.getElementById('status').value
+      };
+
+      try {
+        const response = await fetch('http://localhost:8000/alunos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(aluno)
+        });
+
+        const result = await response.json();
+        
+        if (response.ok) {
+          document.getElementById('mensagem-sucesso').innerHTML = `
+            <p style="color: green; background-color: #e8f5e9; padding: 10px; border-radius: 4px;">
+              Aluno cadastrado com sucesso! ID: ${result.id}
+            </p>
+          `;
+          
+          // Limpa o formulário após 2 segundos
+          setTimeout(() => {
+            document.getElementById('form-cadastro').reset();
+            document.getElementById('mensagem-sucesso').innerHTML = '';
+          }, 2000);
+        } else {
+          throw new Error(result.error || 'Erro ao cadastrar aluno');
+        }
+      } catch (error) {
+        document.getElementById('mensagem-sucesso').innerHTML = `
+          <p style="color: #d32f2f; background-color: #ffebee; padding: 10px; border-radius: 4px;">
+            Erro: ${error.message}
+          </p>
+        `;
+      }
+    });
+
+    // Validação básica do CPF (somente números)
+    document.getElementById('cpf').addEventListener('input', function(e) {
+      this.value = this.value.replace(/\D/g, '');
+    });
   </script>
 
 </body>
