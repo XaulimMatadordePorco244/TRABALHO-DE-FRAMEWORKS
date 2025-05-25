@@ -2,6 +2,7 @@ import mysql, { Pool, PoolConnection } from 'mysql2/promise';
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import cors from '@fastify/cors';
 
+
 // Configuração do banco de dados
 const dbConfig = {
   host: "localhost",
@@ -33,11 +34,15 @@ async function testConnection() {
 
 // Configuração do Fastify
 const app: FastifyInstance = fastify();
-app.register(cors);
+app.register(cors, {
+  origin: '*',
+  methods: ['GET', 'POST', 'DELETE', 'PUT']
+});
+
 
 // Rotas
 // Rota para listar alunos (atualizada para o HTML de listagem)
-app.get("/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
+app.get("/api/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
   let conn: PoolConnection | null = null;
   try {
     conn = await pool.getConnection();
@@ -60,12 +65,12 @@ app.get("/alunos", async (request: FastifyRequest, reply: FastifyReply) => {
 });
 
 // Rota para filtrar alunos (ajustada para o HTML de filtro)
-app.get("/filtrar_alunos", async (request: FastifyRequest, reply: FastifyReply) => {
+app.get("/api/alunos/filtrar_alunos", async (request: FastifyRequest, reply: FastifyReply) => {
   const query = request.query as { campo: string, valor: string };
   const { campo, valor } = query;
 
   const camposPermitidos = ["cpf", "nome", "idade", "plano", "data_vencimento", "status"];
-  
+
   if (!campo || !valor || !camposPermitidos.includes(campo)) {
     return reply.status(400).send({ error: "Parâmetros inválidos." });
   }
@@ -73,17 +78,22 @@ app.get("/filtrar_alunos", async (request: FastifyRequest, reply: FastifyReply) 
   let conn: PoolConnection | null = null;
   try {
     conn = await pool.getConnection();
-    
+
     let querySql = "SELECT * FROM alunos WHERE ?? LIKE ?";
     let params = [campo, `%${valor}%`];
-    
+
     if (campo === 'idade') {
       querySql = "SELECT * FROM alunos WHERE ?? = ?";
       params = [campo, parseInt(valor).toString()];
     } else if (campo === 'data_vencimento') {
       querySql = "SELECT * FROM alunos WHERE DATE(??) = DATE(?)";
+      params = [campo, valor];
+    } else if (campo === 'status') {
+      querySql = "SELECT * FROM alunos WHERE ?? = ?";
+      params = [campo, valor];
     }
-    
+
+
     const [rows] = await conn.query(querySql, params);
     reply.status(200).send(rows);
   } catch (error: any) {
@@ -91,13 +101,14 @@ app.get("/filtrar_alunos", async (request: FastifyRequest, reply: FastifyReply) 
   } finally {
     if (conn) conn.release();
   }
+
 });
 
 // Rota para cadastrar aluno (ajustada para o HTML de cadastro)
-app.post("/cadastrar_aluno", async (request: FastifyRequest, reply: FastifyReply) => {
+app.post("/api/alunos/cadastrar_aluno", async (request: FastifyRequest, reply: FastifyReply) => {
   const aluno = request.body as any;
   let conn: PoolConnection | null = null;
-  
+
   try {
     conn = await pool.getConnection();
     const [result] = await conn.query(
@@ -111,9 +122,9 @@ app.post("/cadastrar_aluno", async (request: FastifyRequest, reply: FastifyReply
         aluno.status || 'Ativo'
       ]
     );
-    reply.status(201).send({ 
-      message: "Aluno cadastrado com sucesso", 
-      id: (result as any).insertId 
+    reply.status(201).send({
+      message: "Aluno cadastrado com sucesso",
+      id: (result as any).insertId
     });
   } catch (error: any) {
     handleDatabaseError(error, reply);
@@ -123,45 +134,46 @@ app.post("/cadastrar_aluno", async (request: FastifyRequest, reply: FastifyReply
 });
 
 // Rota para deletar aluno (ajustada para o HTML de deleção)
-app.delete("/deletar_aluno/:cpf", async (request: FastifyRequest, reply: FastifyReply) => {
-    const { cpf } = request.params as { cpf: string };
-    let conn: PoolConnection | null = null;
+app.delete("/api/alunos/deletar_aluno/:cpf", async (request: FastifyRequest, reply: FastifyReply) => {
+  const { cpf } = request.params as { cpf: string };
+  console.log("CPF recebido para deletar:", cpf);
+  let conn: PoolConnection | null = null;
 
-    try {
-        conn = await pool.getConnection();
-        const cpfNumerico = cpf.replace(/\D/g, ''); // Remove formatação do CPF
-        
-        // Primeiro verifica se o aluno existe
-        const [rows] = await conn.query(
-            "SELECT * FROM alunos WHERE cpf = ?", 
-            [cpfNumerico]
-        );
+  try {
+    conn = await pool.getConnection();
+    const cpfNumerico = cpf.replace(/\D/g, ''); // Remove formatação do CPF
 
-        if ((rows as any[]).length === 0) {
-            return reply.status(404).send({ error: "Aluno não encontrado" });
-        }
+    // Primeiro verifica se o aluno existe
+    const [rows] = await conn.query(
+      "SELECT * FROM alunos WHERE cpf = ?",
+      [cpfNumerico]
+    );
 
-        // Se existir, deleta
-        await conn.query(
-            "DELETE FROM alunos WHERE cpf = ?",
-            [cpfNumerico]
-        );
-
-        reply.status(200).send({ 
-            message: "Aluno deletado com sucesso",
-            aluno: (rows as any[])[0] // Retorna os dados do aluno deletado
-        });
-    } catch (error: any) {
-        handleDatabaseError(error, reply);
-    } finally {
-        if (conn) conn.release();
+    if ((rows as any[]).length === 0) {
+      return reply.status(404).send({ error: "Aluno não encontrado" });
     }
+
+    // Se existir, deleta
+    await conn.query(
+      "DELETE FROM alunos WHERE cpf = ?",
+      [cpfNumerico]
+    );
+
+    reply.status(200).send({
+      message: "Aluno deletado com sucesso",
+      aluno: (rows as any[])[0] // Retorna os dados do aluno deletado
+    });
+  } catch (error: any) {
+    handleDatabaseError(error, reply);
+  } finally {
+    if (conn) conn.release();
+  }
 });
 
 // Função para tratar erros do banco de dados
 function handleDatabaseError(error: any, reply: FastifyReply) {
   console.error('Erro no banco de dados:', error);
-  
+
   if (error.code === "ECONNREFUSED") {
     reply.status(500).send({ error: "Servidor de banco de dados não está respondendo. Verifique se o MySQL está rodando." });
   } else if (error.code === "ER_BAD_DB_ERROR") {

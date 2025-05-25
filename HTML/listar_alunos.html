@@ -74,7 +74,7 @@
         // Carregar alunos da API
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const response = await fetch('http://localhost:8000/alunos');
+                const response = await fetch('http://localhost:8000/api/alunos');
                 
                 if (!response.ok) {
                     throw new Error('Erro ao carregar alunos');

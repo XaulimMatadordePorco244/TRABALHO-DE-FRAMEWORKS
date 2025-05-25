@@ -78,7 +78,7 @@
     resultadoDiv.innerHTML = '<p class="carregando">Buscando alunos...</p>';
 
     try {
-      const response = await fetch(`http://localhost:8000/api/alunos/filtrar?campo=${filtro}&valor=${encodeURIComponent(valor)}`);
+      const response = await fetch(`http://localhost:8000/api/alunos/filtrar_alunos?campo=${filtro}&valor=${encodeURIComponent(valor)}`);
 
       if (!response.ok) {
         const errorData = await response.json();

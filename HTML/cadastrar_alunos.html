@@ -74,7 +74,7 @@
       };
 
       try {
-        const response = await fetch('http://localhost:8000/alunos', {
+        const response = await fetch('http://localhost:8000/api/alunos/cadastrar_aluno', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -82,12 +82,11 @@
           body: JSON.stringify(aluno)
         });
 
-        const result = await response.json();
         
         if (response.ok) {
           document.getElementById('mensagem-sucesso').innerHTML = `
             <p style="color: green; background-color: #e8f5e9; padding: 10px; border-radius: 4px;">
-              Aluno cadastrado com sucesso! ID: ${result.id}
+              Aluno cadastrado com sucesso! ID: 
             </p>
           `;
           

@@ -55,11 +55,9 @@
 
         try {
           // 1. Faz a requisição para deletar o aluno
-          const response = await fetch(`http://localhost:8000/alunos/${cpf}`, {
+          const response = await fetch(`http://localhost:8000/api/alunos/deletar_aluno/${cpf}`, {
             method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json'
-            }
+           
           });
 
           const data = await response.json();
