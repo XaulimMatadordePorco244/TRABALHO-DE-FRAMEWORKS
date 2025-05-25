@@ -1,4 +1,5 @@
 @import '/CSS/root.css';
+@import '/CSS/cabecalho.css';
 /* Reset e Estilos Globais */
 * {
   margin: 0;
@@ -6,7 +7,7 @@
   box-sizing: border-box;
 }
 
-body {
+.deletar-page {
   font-family: var(--fonte-principal);
   background-color: var(--cor-primaria);
   color: var(--cor-texto-primario);
@@ -15,149 +16,169 @@ body {
   flex-direction: column;
 }
 
-header {
-  background-color: var(--cor-secundaria);
-  padding: 2rem;
+.cabecalho-deletar {
   text-align: center;
-  box-shadow: var(--sombra-padrao);
-  border-bottom: 1px solid var(--cor-terciaria);
+  margin-bottom: 1.3rem; /* Espaço entre o título e o card */
+  width: 100%;
+  max-width: 550px; /* Mesma largura do card para alinhamento */
 }
 
-header h1 {
-  color: var(--cor-destaque);
-  margin: 0;
-  font-size: 2.5rem;
+.cabecalho-deletar h1 {
+  color: var(--cor-texto-primario);
+  font-size: var(--tamanho-titulo);
+  margin-bottom: 0.2rem;
 }
 
-header p {
+.cabecalho-deletar p {
   color: var(--cor-texto-secundario);
-  margin: 0.5rem 0 0;
-  font-size: 1.2rem;
 }
 
-/* Conteúdo Principal */
-main {
-  padding: 2rem;
+.deletar-page main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  padding: 2rem;
 }
 
-h2 {
-  color: var(--cor-texto-primario);
-  margin: 1rem 0 2rem;
-  font-size: 1.8rem;
+.card-deletar {
+  background-color: var(--cor-secundaria);
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: var(--sombra-padrao);
+  width: 100%;
+  max-width: 550px;
+  border: 1px solid var(--cor-terciaria);
+}
+
+
+.subtitulo-deletar {
+  color: var(--cor-texto-secundario);
+  font-size: var(--tamanho-subtitulo);
+  margin-bottom: 2rem;
   text-align: center;
 }
 
-/* Formulário */
-.form-container {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto 2rem;
+.form-deletar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
 }
 
-form {
-  background-color: var(--cor-secundaria);
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: var(--sombra-padrao);
-  border: 1px solid var(--cor-terciaria);
-}
-
-input {
-  width: 100%;
+.form-deletar input {
   padding: 0.75rem 1rem;
-  margin-bottom: 1.5rem;
-  background-color: var(--cor-primaria);
+  background-color: var(--cor-terciaria);
   color: var(--cor-texto-primario);
   border: 1px solid var(--cor-terciaria);
   border-radius: 6px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  font-size: var(--tamanho-texto);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-input:focus {
+.form-deletar input:focus {
   outline: none;
   border-color: var(--cor-destaque);
   box-shadow: var(--sombra-neon);
 }
 
-button {
-  width: 100%;
-  padding: 0.75rem;
+#button-deletar {
+  padding: 0.75rem 1.5rem;
   background-color: var(--cor-alerta);
   color: var(--cor-texto-primario);
   border: none;
   border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: var(--tamanho-texto);
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-button:hover {
+#button-deletar:hover {
   background-color: #ff5252;
   transform: translateY(-2px);
 }
 
-button:active {
+#button-deletar:active {
+  background-color: #e53935;
   transform: translateY(0);
 }
 
-/* Mensagens */
-#mensagem {
-  padding: 1rem;
+.mensagem {
   margin: 1rem 0;
+  padding: 0.75rem;
   border-radius: 6px;
   text-align: center;
-  font-weight: 500;
-  width: 100%;
-  max-width: 500px;
 }
 
-/* Lista de Deletados */
-.deleted-list {
-  width: 100%;
-  max-width: 500px;
+.mensagem.sucesso {
+  background-color: rgba(0, 200, 150, 0.2);
+  color: var(--cor-sucesso);
+}
+
+.mensagem.erro {
+  background-color: rgba(255, 107, 107, 0.2);
+  color: var(--cor-alerta);
+}
+
+.lista-deletados {
   margin-top: 2rem;
+}
+
+.lista-deletados h3 {
+  color: var(--cor-texto-secundario);
+  margin-bottom: 1rem;
+}
+
+.lista-deletados ul {
+  list-style: none;
+}
+
+.lista-deletados li {
+  background-color: var(--cor-terciaria);
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  border-left: 4px solid var(--cor-alerta);
+}
+
+/* Rodapé */
+footer {
   background-color: var(--cor-secundaria);
   padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: var(--sombra-padrao);
-}
-
-.deleted-list h3 {
-  color: var(--cor-texto-primario);
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-}
-
-#listaDeletados {
-  list-style-type: none;
-}
-
-#listaDeletados li {
-  padding: 0.5rem 0;
+  text-align: center;
   color: var(--cor-texto-secundario);
-  border-bottom: 1px solid var(--cor-terciaria);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--cor-terciaria);
 }
 
 /* Responsividade */
-@media (max-width: 600px) {
-
-  .form-container,
-  #mensagem,
-  .deleted-list {
-    width: 90%;
+/* Media Queries para telas maiores */
+@media (min-width: 768px) {
+  .deletar-page main {
+    padding: 2rem;
   }
 
-  form {
-    padding: 1.5rem;
+  .cabecalho-deletar h1 {
+    font-size: var(--tamanho-titulo);
   }
 
-  h2 {
-    font-size: 1.5rem;
+  .cabecalho-deletar p {
+    font-size: var(--tamanho-subtitulo);
+  }
+
+  .card-deletar {
+    padding: 2rem;
+  }
+
+  .form-deletar {
+    gap: 1.2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-deletar {
+    padding: 2.5rem;
   }
 }

@@ -1,4 +1,5 @@
 @import '/CSS/root.css';
+@import '/CSS/cabecalho.css';
 /* Reset e Estilos Globais */
  * {
    margin: 0;
@@ -8,7 +9,6 @@
 
  body {
    background-color: var(--cor-primaria);
-   color: var(--cor-texto-primario);
    font-family: var(--fonte-principal);
    font-size: var(--tamanho-texto);
    line-height: 1.6;
@@ -17,29 +17,7 @@
    flex-direction: column;
  }
 
- /* Cabeçalho */
- header {
-   background-color: var(--cor-secundaria);
-   padding: 2rem;
-   text-align: center;
-   box-shadow: var(--sombra-padrao);
-   border-bottom: 1px solid var(--cor-terciaria);
- }
-
- header h1 {
-   color: var(--cor-destaque);
-   margin: 0;
-   font-size: var(--tamanho-titulo);
-   font-weight: 700;
-   letter-spacing: 1px;
- }
-
- header p {
-   color: var(--cor-texto-secundario);
-   margin: 0.5rem 0 0;
-   font-size: var(--tamanho-subtitulo);
- }
-
+ 
  /* Conteúdo Principal */
  main {
    padding: 3rem 2rem;
@@ -114,6 +92,41 @@
      font-size: 1rem;
    }
  }
+
+/*Menu sandwish*/
+ th,
+td {
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid var(--cor-terciaria);
+}
+
+th {
+  background-color: var(--cor-terciaria);
+  color: var(--cor-texto-primario);
+  font-weight: 500;
+}
+
+td {
+  color: var(--cor-texto-primario);
+}
+
+tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+tr:hover {
+  background-color: rgba(0, 230, 160, 0.1);
+}
+
+button:active {
+  background-color: var(--cor-destaque-escuro);
+  transform: translateY(0);
+}
+button:hover {
+  background-color: var(--cor-destaque-claro);
+  transform: translateY(-2px);
+}
 
  @media (max-width: 480px) {
    main {

@@ -1,33 +1,83 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Deletar Aluno - GymSystem</title>
+  <link rel="stylesheet" href="/CSS/deletar_aluno.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 
-<body>
-  <header>
+<body class="deletar-page">
+  <header id="cabecalho">
+    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
     <h1>GymSystem</h1>
     <p>Organize sua Academia com Facilidade!</p>
   </header>
-  
-  <form id="formDeletar">
-    <input type="text" id="cpf" placeholder="Digite o CPF (apenas números)" required>
-    <button type="submit">Deletar Cadastro</button>
-  </form>
 
-  <div id="mensagem"></div>
-  
-  <div id="lista-container">
-    <h3>Últimos deletados:</h3>
-    <ul id="listaDeletados"></ul>
-  </div>
+  <nav class="menu-lateral" id="menu-lateral">
+    <button class="close-btn" id="close-btn">&times;</button>
+    <ul>
+      <li><a href="/HTML/tela_inicial.html">Início</a></li>
+      <li><a href="/HTML/listar_alunos.html">Listar Alunos</a></li>
+      <li><a href="/HTML/cadastrar_alunos.html">Cadastrar Aluno</a></li>
+      <li><a href="/HTML/filtrar_alunos.html">Filtrar Alunos</a></li>
+      <li><a href="/HTML/deletar_alunos.html">Deletar</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="cabecalho-deletar">
+      <h1>Deletar Alunos</h1>
+      <p>Digite o CPF do aluno que deseja remover do sistema</p>
+    </div>
+
+    <div class="card-deletar">
+      <form id="formDeletar" class="form-deletar">
+        <input type="text" id="cpf" placeholder="Digite o CPF (apenas números)" required>
+        <button id="button-deletar" type="submit">Deletar Cadastro</button>
+      </form>
+
+      <div id="mensagem" class="mensagem"></div>
+
+      <div id="lista-container" class="lista-deletados">
+        <h3>Últimos deletados:</h3>
+        <ul id="listaDeletados"></ul>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 GymSystem | Todos os direitos reservados</p>
+  </footer>
 
   <script>
+    // Menu lateral
+    const toggle = document.getElementById("menu-toggle");
+    const menu = document.getElementById("menu-lateral");
+    const closeBtn = document.getElementById("close-btn");
+
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.classList.toggle("aberto");
+    });
+
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.classList.remove("aberto");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+        menu.classList.remove("aberto");
+      }
+    });
+
+    /////////////////////////////////////////////////////////
+
     document.addEventListener('DOMContentLoaded', () => {
       const form = document.getElementById('formDeletar');
       const mensagem = document.getElementById('mensagem');
@@ -35,7 +85,7 @@
       const cpfInput = document.getElementById('cpf');
 
       // Máscara para CPF (apenas números e limita a 11 caracteres)
-      cpfInput.addEventListener('input', function(e) {
+      cpfInput.addEventListener('input', function (e) {
         this.value = this.value.replace(/\D/g, '').slice(0, 11);
       });
 
@@ -57,7 +107,7 @@
           // 1. Faz a requisição para deletar o aluno
           const response = await fetch(`http://localhost:8000/api/alunos/deletar_aluno/${cpf}`, {
             method: 'DELETE',
-           
+
           });
 
           const data = await response.json();
@@ -69,7 +119,7 @@
           // 2. Adiciona à lista de deletados
           adicionarAlunoDeletado(data.aluno);
           mostrarMensagem(data.message, "sucesso");
-          
+
         } catch (erro) {
           mostrarMensagem(erro.message, "erro");
           console.error("Erro na requisição:", erro);
@@ -95,14 +145,14 @@
           <strong>Plano:</strong> ${aluno.plano || 'Não informado'}<br>
           <strong>Status:</strong> ${aluno.status || 'Não informado'}
         `;
-        
+
         // Adiciona no início da lista
         if (listaDeletados.firstChild) {
           listaDeletados.insertBefore(li, listaDeletados.firstChild);
         } else {
           listaDeletados.appendChild(li);
         }
-        
+
         // Limita a lista a 5 itens
         if (listaDeletados.children.length > 5) {
           listaDeletados.removeChild(listaDeletados.lastChild);
@@ -116,4 +166,5 @@
     });
   </script>
 </body>
+
 </html>

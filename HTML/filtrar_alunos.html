@@ -12,10 +12,22 @@
 </head>
 
 <body>
-  <header>
+  <header id="cabecalho">
+    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
     <h1>GymSystem</h1>
     <p>Organize sua Academia com Facilidade!</p>
   </header>
+
+  <nav class="menu-lateral" id="menu-lateral">
+    <button class="close-btn" id="close-btn">&times;</button>
+    <ul>
+      <li><a href="/HTML/tela_inicial.html">Início</a></li>
+      <li><a href="/HTML/listar_alunos.html">Listar Alunos</a></li>
+      <li><a href="/HTML/cadastrar_alunos.html">Cadastrar Aluno</a></li>
+      <li><a href="/HTML/filtrar_alunos.html">Filtrar Alunos</a></li>
+      <li><a href="/HTML/deletar_alunos.html">Deletar</a></li>
+    </ul>
+  </nav>
 
   <main>
     <h2>Pesquisar Alunos</h2>
@@ -39,64 +51,92 @@
     <div id="resultadoBusca"></div>
   </main>
 
- <script>
-  function mudarTipoBusca() {
-    const filtro = document.getElementById('filtroBusca').value;
-    const campoBusca = document.getElementById('campoBusca');
+  <footer>
+    <p>&copy; 2025 GymSystem | Todos os direitos reservados</p>
+  </footer>
 
-    switch (filtro) {
-      case 'idade':
-        campoBusca.innerHTML = '<input type="number" id="valorBusca" placeholder="Digite a idade" min="0">';
-        break;
-      case 'data_vencimento':
-        campoBusca.innerHTML = '<input type="date" id="valorBusca">';
-        break;
-      case 'status':
-        campoBusca.innerHTML = `
+  <script>
+    // Menu lateral
+    const toggle = document.getElementById("menu-toggle");
+    const menu = document.getElementById("menu-lateral");
+    const closeBtn = document.getElementById("close-btn");
+
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.classList.toggle("aberto");
+    });
+
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.classList.remove("aberto");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+        menu.classList.remove("aberto");
+      }
+    });
+
+   ////////////////////////////////////////////////////////////////////
+
+
+    function mudarTipoBusca() {
+      const filtro = document.getElementById('filtroBusca').value;
+      const campoBusca = document.getElementById('campoBusca');
+
+      switch (filtro) {
+        case 'idade':
+          campoBusca.innerHTML = '<input type="number" id="valorBusca" placeholder="Digite a idade" min="0">';
+          break;
+        case 'data_vencimento':
+          campoBusca.innerHTML = '<input type="date" id="valorBusca">';
+          break;
+        case 'status':
+          campoBusca.innerHTML = `
           <select id="valorBusca">
             <option value="">Selecione...</option>
             <option value="Ativo">Ativo</option>
             <option value="Inativo">Inativo</option>
             <option value="Pendente">Pendente</option>
           </select>`;
-        break;
-      default:
-        campoBusca.innerHTML = '<input type="text" id="valorBusca" placeholder="Digite para buscar">';
-    }
-  }
-
-  async function buscarAluno() {
-    const filtro = document.getElementById('filtroBusca').value;
-    const valor = document.getElementById('valorBusca').value;
-    const resultadoDiv = document.getElementById('resultadoBusca');
-
-    if (!valor) {
-      resultadoDiv.innerHTML = '<p class="erro">Por favor, digite um valor para buscar.</p>';
-      return;
-    }
-
-    resultadoDiv.innerHTML = '<p class="carregando">Buscando alunos...</p>';
-
-    try {
-      const response = await fetch(`http://localhost:8000/api/alunos/filtrar_alunos?campo=${filtro}&valor=${encodeURIComponent(valor)}`);
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Erro na busca');
+          break;
+        default:
+          campoBusca.innerHTML = '<input type="text" id="valorBusca" placeholder="Digite para buscar">';
       }
+    }
 
-      const alunos = await response.json();
+    async function buscarAluno() {
+      const filtro = document.getElementById('filtroBusca').value;
+      const valor = document.getElementById('valorBusca').value;
+      const resultadoDiv = document.getElementById('resultadoBusca');
 
-      if (alunos.length === 0) {
-        resultadoDiv.innerHTML = '<p class="erro">Nenhum aluno encontrado.</p>';
+      if (!valor) {
+        resultadoDiv.innerHTML = '<p class="erro">Por favor, digite um valor para buscar.</p>';
         return;
       }
 
-      let html = '<table class="tabela-resultados"><thead><tr>';
-      html += '<th>CPF</th><th>Nome</th><th>Idade</th><th>Plano</th><th>Vencimento</th><th>Status</th></tr></thead><tbody>';
+      resultadoDiv.innerHTML = '<p class="carregando">Buscando alunos...</p>';
 
-      alunos.forEach(aluno => {
-        html += `<tr>
+      try {
+        const response = await fetch(`http://localhost:8000/api/alunos/filtrar_alunos?campo=${filtro}&valor=${encodeURIComponent(valor)}`);
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Erro na busca');
+        }
+
+        const alunos = await response.json();
+
+        if (alunos.length === 0) {
+          resultadoDiv.innerHTML = '<p class="erro">Nenhum aluno encontrado.</p>';
+          return;
+        }
+
+        let html = '<table class="tabela-resultados"><thead><tr>';
+        html += '<th>CPF</th><th>Nome</th><th>Idade</th><th>Plano</th><th>Vencimento</th><th>Status</th></tr></thead><tbody>';
+
+        alunos.forEach(aluno => {
+          html += `<tr>
           <td>${aluno.cpf || ''}</td>
           <td>${aluno.nome || ''}</td>
           <td>${aluno.idade || ''}</td>
@@ -104,26 +144,26 @@
           <td>${formatarData(aluno.data_vencimento)}</td>
           <td>${aluno.status || ''}</td>
         </tr>`;
-      });
+        });
 
-      html += '</tbody></table>';
-      resultadoDiv.innerHTML = html;
+        html += '</tbody></table>';
+        resultadoDiv.innerHTML = html;
 
-    } catch (error) {
-      console.error('Erro:', error);
-      resultadoDiv.innerHTML = `<p class="erro">Erro ao buscar alunos: ${error.message}</p>`;
+      } catch (error) {
+        console.error('Erro:', error);
+        resultadoDiv.innerHTML = `<p class="erro">Erro ao buscar alunos: ${error.message}</p>`;
+      }
     }
-  }
 
-  function formatarData(dataISO) {
-    if (!dataISO) return '';
-    const data = new Date(dataISO);
-    const dia = String(data.getDate()).padStart(2, '0');
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    const ano = data.getFullYear();
-    return `${dia}/${mes}/${ano}`;
-  }
-</script>
+    function formatarData(dataISO) {
+      if (!dataISO) return '';
+      const data = new Date(dataISO);
+      const dia = String(data.getDate()).padStart(2, '0');
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const ano = data.getFullYear();
+      return `${dia}/${mes}/${ano}`;
+    }
+  </script>
 
 </body>
 

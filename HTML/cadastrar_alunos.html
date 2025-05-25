@@ -4,13 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro de Aluno</title>
+  <link rel="stylesheet" href="/CSS/cadastrar_alunos.css">
 </head>
 <body class="cadastro-page">
 
   <header>
-    <h1>GymSystem</h1>
-    <p>Organize sua Academia com Facilidade!</p>
+        <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+        <h1>GymSystem</h1>
+        <p>Organize sua Academia com Facilidade!</p>
   </header>
+
+  <nav class="menu-lateral" id="menu-lateral">
+    <button class="close-btn" id="close-btn">&times;</button>
+    <ul>
+        <li><a href="/HTML/tela_inicial.html">Início</a></li>
+        <li><a href="/HTML/listar_alunos.html">Listar Alunos</a></li>
+        <li><a href="/HTML/cadastrar_alunos.html">Cadastrar Aluno</a></li>
+        <li><a href="/HTML/filtrar_alunos.html">Filtrar Alunos</a></li>
+        <li><a href="/HTML/deletar_alunos.html">Deletar</a></li>
+    </ul>
+</nav>
 
   <main>
     <h1>Cadastro de Aluno</h1>
@@ -61,6 +74,29 @@
   </footer>
 
   <script>
+    // Menu lateral
+    const toggle = document.getElementById("menu-toggle");
+    const menu = document.getElementById("menu-lateral");
+    const closeBtn = document.getElementById("close-btn");
+
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.classList.toggle("aberto");
+    });
+
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.classList.remove("aberto");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+        menu.classList.remove("aberto");
+      }
+    });
+
+  /////////////////////////////////////////////////////////
+
     document.getElementById('form-cadastro').addEventListener('submit', async (e) => {
       e.preventDefault();
       

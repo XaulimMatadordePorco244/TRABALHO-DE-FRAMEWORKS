@@ -1,4 +1,5 @@
 @import '/CSS/root.css';
+@import '/CSS/cabecalho.css';
 /* Reset e Estilos Globais */
 * {
   margin: 0;
@@ -13,27 +14,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-/* Cabeçalho (mantendo consistência) */
-header {
-  background-color: var(--cor-secundaria);
-  padding: 2rem;
-  text-align: center;
-  box-shadow: var(--sombra-padrao);
-  border-bottom: 1px solid var(--cor-terciaria);
-}
-
-header h1 {
-  color: var(--cor-destaque);
-  margin: 0;
-  font-size: var(--tamanho-titulo);
-}
-
-header p {
-  color: var(--cor-texto-secundario);
-  margin: 0.5rem 0 0;
-  font-size: var(--tamanho-subtitulo);
 }
 
 /* Conteúdo Principal */
@@ -135,6 +115,8 @@ tr:hover {
   background-color: rgba(0, 230, 160, 0.1);
 }
 
+
+
 /* Mensagem de erro (para o alerta) */
 .alerta {
   color: var(--cor-alerta);
@@ -164,4 +146,14 @@ tr:hover {
   td {
     padding: 0.75rem 0.5rem;
   }
+}
+
+/* Rodapé */
+footer {
+  background-color: var(--cor-secundaria);
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--cor-texto-secundario);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--cor-terciaria);
 }
