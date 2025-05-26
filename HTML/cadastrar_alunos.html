@@ -108,7 +108,7 @@
         data_vencimento: document.getElementById('vencimento').value,
         status: document.getElementById('status').value
       };
-
+     // Aqui é onde acontece a interligação, os dados informados são salvos no backend
       try {
         const response = await fetch('http://localhost:8000/api/alunos/cadastrar_aluno', {
           method: 'POST',
